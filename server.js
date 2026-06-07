@@ -6,6 +6,16 @@ const axios = require('axios');
 
 dotenv.config();
 const app = express();
+
+app.use((req, res, next) => {
+    const host = req.get('host');
+    // আপনার পুরনো রেন্ডার লিঙ্কটি এখানে হুবহু দিতে হবে
+    if (host === 'world-cup-2026-oxof.onrender.com') {
+        // এখানে আপনার নতুন ডোমেইন লিঙ্কটি দিন
+        return res.redirect(301, 'https://www.footballdoniya.com' + req.url);
+    }
+    next();
+});
 app.use(express.static('views'));
 
 
@@ -17,15 +27,6 @@ app.use(express.json());
 
 app.use(express.static('public')); // static ফাইল (html, css, js) এর জন্য
 
-app.use((req, res, next) => {
-    const host = req.get('host');
-    // আপনার পুরনো রেন্ডার লিঙ্কটি এখানে হুবহু দিতে হবে
-    if (host === 'world-cup-2026-oxof.onrender.com') {
-        // এখানে আপনার নতুন ডোমেইন লিঙ্কটি দিন
-        return res.redirect(301, 'https://www.footballdoniya.com' + req.url);
-    }
-    next();
-});
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected!"))
