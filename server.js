@@ -12,10 +12,11 @@ app.use((req, res, next) => {
     // আপনার পুরনো রেন্ডার লিঙ্কটি এখানে হুবহু দিতে হবে
     if (host === 'world-cup-2026-oxof.onrender.com') {
         // এখানে আপনার নতুন ডোমেইন লিঙ্কটি দিন
-        return res.redirect(301, 'https://www.footballdoniya.com' + req.url);
+        return res.redirect(301, 'https://footballdoniya.com' + req.url);
     }
     next();
 });
+
 app.use(express.static('views'));
 
 
