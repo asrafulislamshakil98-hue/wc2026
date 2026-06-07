@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পয়েন্ট টেবিল - ২০২৬ বিশ্বকাপ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #011f4b;
+            --gold: #ffd700;
+            --white: #ffffff;
+            --table-border: #dee2e6;
+        }
+        body { font-family: 'Arial', sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 1100px; margin: auto; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
+        
+        h1 { text-align: center; color: var(--primary-blue); font-size: 28px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 4px solid var(--gold); display: inline-block; padding-bottom: 5px; }
+
+        /* গ্রুপ নেভিগেশন */
+        .group-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 30px; position: sticky; top: 0; background: #fff; padding: 10px; z-index: 100; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .group-nav a { text-decoration: none; background: var(--primary-blue); color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; transition: 0.3s; }
+        .group-nav a:hover { background: var(--gold); color: var(--primary-blue); }
+
+        /* টেবিল ডিজাইন */
+        .group-section { margin-bottom: 40px; }
+        .group-name { background: var(--primary-blue); color: var(--gold); padding: 12px; border-radius: 8px 8px 0 0; margin: 0; font-size: 20px; display: flex; align-items: center; }
+        .group-name i { margin-right: 10px; }
+
+        table { width: 100%; border-collapse: collapse; border: 1px solid var(--table-border); background: #fff; }
+        th, td { padding: 12px; text-align: center; border: 1px solid var(--table-border); }
+        th { background-color: #f8f9fa; color: var(--primary-blue); font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        
+        .team-cell { display: flex; align-items: center; text-align: left; font-weight: bold; }
+        .team-cell img { width: 30px; height: auto; margin-right: 12px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+        tr:nth-child(even) { background-color: #fdfdfd; }
+        tr:hover { background-color: #f1f4f9; transition: 0.2s; }
+        
+        .pts { color: #28a745; font-weight: 800; font-size: 16px; }
+        .loss { color: #dc3545; }
+
+        .footer-note { text-align: center; margin-top: 40px; color: #666; font-size: 14px; }
+        .back-btn { display: inline-block; margin-top: 15px; padding: 10px 20px; background: var(--primary-blue); color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
+
+        @media (max-width: 600px) {
+            th, td { padding: 8px; font-size: 12px; }
+            .team-cell img { width: 22px; margin-right: 8px; }
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>২০২৬ বিশ্বকাপ পয়েন্ট টেবিল (অটো আপডেট)</h1>
+    
+    <div id="tables-container">
+        <!-- এখানে জাভাস্ক্রিপ্ট অটোমেটিক গ্রুপ অনুযায়ী টেবিল তৈরি করবে -->
+    </div>
+
+    <!-- গ্রুপ নেভিগেশন বাটন -->
+    <div class="group-nav">
+        <a href="#groupA">A</a> <a href="#groupB">B</a> <a href="#groupC">C</a> <a href="#groupD">D</a>
+        <a href="#groupE">E</a> <a href="#groupF">F</a> <a href="#groupG">G</a> <a href="#groupH">H</a>
+        <a href="#groupI">I</a> <a href="#groupJ">J</a> <a href="#groupK">K</a> <a href="#groupL">L</a>
+    </div>
+
+    <!-- Group A -->
+    <div id="groupA" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ এ (Group A)</h3>
+        <table>
+            <thead>
+                <tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/mx.png"> Mexico</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/za.png"> South Africa</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/kr.png"> South Korea</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/cz.png"> Czech Republic</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group B -->
+    <div id="groupB" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ বি (Group B)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ca.png"> Canada</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/qa.png"> Qatar</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ch.png"> Switzerland</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ba.png"> Bosnia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group C -->
+    <div id="groupC" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ সি (Group C)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/br.png"> Brazil</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ma.png"> Morocco</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ht.png"> Haiti</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/gb-sct.png"> Scotland</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group D -->
+    <div id="groupD" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ ডি (Group D)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/us.png"> United States</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/py.png"> Paraguay</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/au.png"> Australia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/tr.png"> Türkiye</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group E -->
+    <div id="groupE" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ ই (Group E)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/de.png"> Germany</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/cw.png"> Curaçao</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ci.png"> Ivory Coast</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ec.png"> Ecuador</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group F -->
+    <div id="groupF" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ এফ (Group F)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/nl.png"> Netherlands</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/jp.png"> Japan</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/tn.png"> Tunisia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/se.png"> Sweden</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group G -->
+    <div id="groupG" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ জি (Group G)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/be.png"> Belgium</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/eg.png"> Egypt</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ir.png"> Iran</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/nz.png"> New Zealand</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group H -->
+    <div id="groupH" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ এইচ (Group H)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/es.png"> Spain</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/cv.png"> Cape Verde</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/sa.png"> Saudi Arabia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/uy.png"> Uruguay</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group I -->
+    <div id="groupI" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ আই (Group I)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/fr.png"> France</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/sn.png"> Senegal</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/no.png"> Norway</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/iq.png"> Iraq</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group J -->
+    <div id="groupJ" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ জে (Group J)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/ar.png"> Argentina</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/dz.png"> Algeria</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/at.png"> Austria</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/jo.png"> Jordan</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group K -->
+    <div id="groupK" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ কে (Group K)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/pt.png"> Portugal</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/uz.png"> Uzbekistan</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/co.png"> Colombia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/cd.png"> DR Congo</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Group L -->
+    <div id="groupL" class="group-section">
+        <h3 class="group-name"><i class="fas fa-users"></i> গ্রুপ এল (Group L)</h3>
+        <table>
+            <thead><tr><th>দল</th><th>ম্যাচ</th><th>জয়</th><th>ড্র</th><th>পরাজয়</th><th>পয়েন্ট</th></tr></thead>
+            <tbody>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/gb-eng.png"> England</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/hr.png"> Croatia</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/gh.png"> Ghana</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+                <tr><td class="team-cell"><img src="https://flagcdn.com/w40/pa.png"> Panama</td><td>0</td><td>0</td><td>0</td><td class="loss">0</td><td class="pts">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-note">
+        <a href="index.html" class="back-btn"><i class="fas fa-home"></i> হোমে ফিরে যান</a>
+    </div>
+</div>
+<script>
+async function updatePoints() {
+    try {
+        const response = await fetch('/api/points-table');
+        const stats = await response.json();
+
+        // টেবিলের সব রো (Row) খুঁজে বের করা
+        const rows = document.querySelectorAll("table tbody tr");
+
+        rows.forEach(row => {
+            // রো থেকে টিমের নাম নেওয়া (আপনার পতাকা ও নামের কলাম থেকে)
+            const teamName = row.cells[0].innerText.trim();
+
+            if (stats[teamName]) {
+                const team = stats[teamName];
+                // আপনার টেবিলের কলাম অনুযায়ী মান বসানো:
+                // row.cells[1] = ম্যাচ, [2] = জয়, [3] = ড্র, [4] = পরাজয়, [5] = পয়েন্ট
+                row.cells[1].innerText = team.mp;
+                row.cells[2].innerText = team.w;
+                row.cells[3].innerText = team.d;
+                row.cells[4].innerText = team.l;
+                row.cells[5].innerText = team.pts;
+            }
+        });
+        console.log("পয়েন্ট টেবিল অটো-আপডেট হয়েছে!");
+    } catch (err) {
+        console.error("পয়েন্ট আপডেট করতে সমস্যা:", err);
+    }
+}
+
+// পেজ লোড হলে একবার চলবে
+updatePoints();
+
+// প্রতি ৩০ সেকেন্ড পরপর অটো চেক করবে
+setInterval(updatePoints, 30000);
+</script>
+</body>
+</html>

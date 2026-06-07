@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ম্যাচ লাইনআপ - ২০২৬ বিশ্বকাপ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #011f4b; --gold: #ffd700; --bg: #f4f7f6; }
+        body { font-family: 'Hind Siliguri', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        
+        .lineup-card { 
+            max-width: 900px; 
+            margin: auto; 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            text-align: center;
+        }
+
+        .header-icon { font-size: 40px; color: var(--primary); margin-bottom: 10px; }
+        h2 { margin: 0; color: #333; }
+        #match-title { color: var(--primary); margin: 10px 0 30px; font-weight: bold; }
+
+        /* ২ কলামের লেআউট */
+        .lineup-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 30px; 
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .team-column { background: #fafafa; padding: 20px; border-radius: 10px; border-top: 4px solid var(--primary); }
+        .team-name { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+        }
+
+        /* সিরিয়াল নম্বর সহ লিস্ট */
+        ol { padding-left: 25px; margin: 0; }
+        ol li { 
+            margin-bottom: 8px; 
+            font-size: 15px; 
+            color: #444; 
+            padding-bottom: 5px; 
+            border-bottom: 1px solid #eee;
+        }
+        ol li:last-child { border-bottom: none; }
+
+        .back-btn { 
+            display: inline-block; 
+            margin-top: 40px; 
+            text-decoration: none; 
+            color: var(--primary); 
+            font-weight: bold; 
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: #cc0000; transform: translateX(-5px); }
+
+        /* মোবাইলের জন্য ১ কলাম */
+        @media (max-width: 600px) {
+            .lineup-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lineup-card">
+    <div class="header-icon"><i class="fas fa-users"></i></div>
+    <h2>শুরুর একাদশ (Lineups)</h2>
+    <div id="match-title">লোড হচ্ছে...</div>
+
+    <div id="lineup-container" class="lineup-grid">
+        <!-- টিম ১ কলাম -->
+        <div class="team-column">
+            <div class="team-name" id="teamA-header">Team A</div>
+            <ol id="player-list-A">
+                <!-- এখানে প্লেয়ারদের নাম আসবে -->
+            </ol>
+        </div>
+
+        <!-- টিম ২ কলাম -->
+        <div class="team-column">
+            <div class="team-name" id="teamB-header">Team B</div>
+            <ol id="player-list-B">
+                <!-- এখানে প্লেয়ারদের নাম আসবে -->
+            </ol>
+        </div>
+    </div>
+
+    <a href="javascript:history.back()" class="back-btn"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const matchId = urlParams.get('id');
+
+    async function fetchLineup() {
+        if (!matchId) return;
+
+        try {
+            const response = await fetch(`/api/match/${matchId}`);
+            const match = await response.json();
+
+            // ম্যাচের নাম সেট করা
+            document.getElementById('match-title').innerText = `${match.teamA} বনাম ${match.teamB}`;
+            document.getElementById('teamA-header').innerText = match.teamA;
+            document.getElementById('teamB-header').innerText = match.teamB;
+
+            // প্লেয়ার লিস্ট তৈরি (কমা দিয়ে আলাদা করা নামগুলোকে অ্যারেতে রূপান্তর)
+            const displayPlayers = (lineupStr, listId) => {
+                const list = document.getElementById(listId);
+                list.innerHTML = "";
+                
+                if (!lineupStr || lineupStr.includes("ঘোষণা করা হয়নি")) {
+                    list.innerHTML = "<li>তথ্য নেই</li>";
+                    return;
+                }
+
+                // কমা দিয়ে আলাদা করে প্রতিটি প্লেয়ারকে <li> হিসেবে যোগ করা
+                const players = lineupStr.split(',');
+                players.forEach(player => {
+                    const li = document.createElement('li');
+                    li.innerText = player.trim();
+                    list.appendChild(li);
+                });
+            };
+
+            displayPlayers(match.lineupA, 'player-list-A');
+            displayPlayers(match.lineupB, 'player-list-B');
+
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById('match-title').innerText = "লাইনআপ লোড করা সম্ভব হয়নি।";
+        }
+    }
+
+    fetchLineup();
+</script>
+
+</body>
+</html>

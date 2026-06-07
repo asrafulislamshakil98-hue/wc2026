@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাডমিন কন্ট্রোল - ২০২৬ বিশ্বকাপ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #011f4b; --gold: #ffd700; --bg: #f4f7f6; --white: #fff; }
+        body { font-family: 'Hind Siliguri', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        
+        /* ট্যাব মেনু */
+        .admin-menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
+        .menu-btn { background: #ddd; color: #333; padding: 12px 20px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .menu-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .menu-btn:hover { background: var(--gold); color: var(--primary); }
+
+        /* কার্ড সিস্টেম */
+        .admin-card { background: var(--white); border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); display: none; }
+        .admin-card.active-card { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-size: 22px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        
+        .row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 250px; }
+        
+        /* বাটন */
+        .btn-save { background: #28a745; color: white; width: 100%; padding: 14px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-yt { background: #ff0000; color: white; padding: 10px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .action-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; font-size: 13px; margin-left: 5px; }
+        
+        /* লিস্ট আইটেম */
+        .list-item { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
+        .list-info strong { color: var(--primary); font-size: 16px; }
+
+        /* ভিডিও মডাল */
+        #videoModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        #ytResults { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align: center; color: var(--primary);"><i class="fas fa-user-shield"></i> অ্যাডমিন ড্যাশবোর্ড</h1>
+
+    <!-- মেনু বাটনসমূহ -->
+    <div class="admin-menu">
+        <button class="menu-btn active" onclick="showCard('yt-card', this)"><i class="fab fa-youtube"></i> লাইভ খুঁজুন</button>
+        <button class="menu-btn" onclick="showCard('match-form-card', this)"><i class="fas fa-plus-circle"></i> ম্যাচ যোগ</button>
+        <button class="menu-btn" onclick="showCard('blog-form-card', this)"><i class="fas fa-pen"></i> ব্লগ যোগ</button>
+        <button class="menu-btn" onclick="showCard('match-list-card', this)"><i class="fas fa-list"></i> ম্যাচের তালিকা</button>
+        <button class="menu-btn" onclick="showCard('points-card', this)"><i class="fas fa-table"></i> পয়েন্ট আপডেট</button>
+        <button class="menu-btn" onclick="showCard('blog-list-card', this)"><i class="fas fa-newspaper"></i> ব্লগের তালিকা</button>
+    </div>
+
+    <!-- ১. ইউটিউব সার্চ -->
+    <div id="yt-card" class="admin-card active-card">
+        <h2>YouTube Live Finder</h2>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="ytSearchInput" placeholder="ম্যাচের নাম লিখে লাইভ খুঁজুন...">
+            <button class="btn-yt" onclick="searchYouTubeLive()">খুঁজুন</button>
+        </div>
+        <div id="ytResults"></div>
+    </div>
+
+    <!-- ২. ম্যাচ ফর্ম -->
+    <div id="match-form-card" class="admin-card">
+        <h2 id="match-form-title">নতুন ম্যাচ যোগ করুন</h2>
+        <form id="add-match-form">
+            <div class="row">
+                <div class="col">
+                    <label>টিম ১ (Team A)</label>
+                    <input type="text" id="teamA" oninput="updateMatchUI('teamA', 'flagImgA', 'lineupA')" required>
+                    <img id="flagImgA" style="width:35px; display:none; margin-top:5px; border-radius:4px;">
+                </div>
+                <div class="col">
+                    <label>টিম ২ (Team B)</label>
+                    <input type="text" id="teamB" oninput="updateMatchUI('teamB', 'flagImgB', 'lineupB')" required>
+                    <img id="flagImgB" style="width:35px; display:none; margin-top:5px; border-radius:4px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><textarea id="lineupA" placeholder="টিম ১ স্কোয়াড" rows="4"></textarea></div>
+                <div class="col"><textarea id="lineupB" placeholder="টিম ২ স্কোয়াড" rows="4"></textarea></div>
+            </div>
+            <div class="row">
+                <div class="col"><label>তারিখ ও সময়</label><input type="datetime-local" id="matchDate" required></div>
+                <div class="col"><label>ভেন্যু</label><input type="text" id="venue" required></div>
+            </div>
+            <div class="form-group">
+                <label>স্ট্রিমিং লিঙ্ক (YouTube/FIFA+)</label>
+                <input type="url" id="streamUrl" placeholder="https://...">
+            </div>
+            <button type="submit" class="btn-save" id="match-save-btn">ম্যাচ সেভ করুন</button>
+        </form>
+    </div>
+
+    <!-- ৩. ব্লগ ফর্ম -->
+    <div id="blog-form-card" class="admin-card">
+        <h2 id="blog-form-title">নতুন ব্লগ যোগ করুন</h2>
+        <form id="add-blog-form">
+            <div class="form-group"><label>শিরোনাম</label><input type="text" id="blogTitle" required></div>
+            <div class="form-group"><label>ছবির লিঙ্ক</label><input type="url" id="blogImage"></div>
+            <div class="form-group"><label>বিস্তারিত বর্ণনা</label><textarea id="blogContent" rows="10" required></textarea></div>
+            <button type="submit" class="btn-save" style="background:var(--primary)" id="blog-save-btn">ব্লগ পাবলিশ করুন</button>
+        </form>
+    </div>
+
+    <!-- ৪. ম্যাচের তালিকা -->
+    <div id="match-list-card" class="admin-card">
+        <h2>সব ম্যাচের তালিকা</h2>
+        <div id="admin-match-container">লোড হচ্ছে...</div>
+    </div>
+
+    <!-- ৫. ব্লগের তালিকা -->
+    <div id="blog-list-card" class="admin-card">
+        <h2>সব ব্লগের তালিকা</h2>
+        <div id="admin-blog-container">লোড হচ্ছে...</div>
+    </div>
+</div>
+
+<!-- ভিডিও প্রিভিউ মডাল -->
+<div id="videoModal">
+    <div style="width: 90%; max-width: 750px; position: relative;">
+        <button onclick="closePreview()" style="position:absolute; top:-35px; right:0; color:#fff; background:red; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer;">X</button>
+        <div id="modalPlayer"></div>
+    </div>
+</div>
+<div id="points-card" class="admin-card">
+    <h2><i class="fas fa-edit"></i> পয়েন্ট টেবিল এডিটর (ম্যানুয়াল)</h2>
+    <div style="overflow-x: auto;">
+        <table style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background:#eee;">
+                    <th>দেশ</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>PTS</th><th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="admin-points-list">
+                <!-- জাভাস্ক্রিপ্ট দিয়ে এখানে লিস্ট আসবে -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- পয়েন্ট টেবিল ম্যানেজমেন্ট কার্ড -->
+<div id="points-card" class="admin-card">
+    <h2><i class="fas fa-sync"></i> পয়েন্ট টেবিল ম্যানেজমেন্ট</h2>
+    <p style="color: #666; margin-bottom: 20px;">
+        ম্যাচের রেজাল্ট (Score) ইনপুট দেওয়ার পর পয়েন্ট টেবিল অটোমেটিক আপডেট হয়। 
+        আপনি চাইলে এখান থেকে ডাটাবেসের সাথে বর্তমান পয়েন্টগুলো সিঙ্ক (Sync) করে নিতে পারেন।
+    </p>
+    
+    <div style="text-align: center; padding: 20px; border: 2px dashed #ddd; border-radius: 10px;">
+        <button class="btn-save" style="background: #007bff; width: auto; padding: 12px 30px;" onclick="syncPoints()">
+            <i class="fas fa-rotate"></i> এখনই পয়েন্ট টেবিল রিফ্রেশ করুন
+        </button>
+        <p id="sync-status" style="margin-top: 15px; font-weight: bold;"></p>
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

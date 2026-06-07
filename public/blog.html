@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>বিশ্বকাপ ব্লগ ও নিউজ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .blog-card { background: white; margin-bottom: 30px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .blog-card img { width: 100%; height: 300px; object-fit: cover; }
+        .blog-info { padding: 20px; }
+        .blog-info h2 { color: #011f4b; margin: 0 0 10px 0; }
+        .blog-info p { white-space: pre-line; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin: 30px 0;">বিশ্বকাপ স্পেশাল নিউজ</h1>
+        <div id="blog-container">
+            <p style="text-align: center;">ব্লগ লোড হচ্ছে...</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadBlogs() {
+            const res = await fetch('/api/blogs');
+            const blogs = await res.json();
+            const container = document.getElementById('blog-container');
+            container.innerHTML = '';
+
+            blogs.forEach(blog => {
+                container.innerHTML += `
+                    <div class="blog-card">
+                        ${blog.imageUrl ? `<img src="${blog.imageUrl}">` : ''}
+                        <div class="blog-info">
+                            <h2>${blog.title}</h2>
+                            <small>তারিখ: ${new Date(blog.createdAt).toLocaleDateString('bn-BD')}</small>
+                            <p>${blog.content}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        loadBlogs();
+    </script>
+</body>
+</html>
