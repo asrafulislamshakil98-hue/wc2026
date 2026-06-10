@@ -2,165 +2,195 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>বিশ্বকাপ ব্লগ ও নিউজ</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিশ্বকাপ ব্লগ ও নিউজ - ২০২৬</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        .blog-card { background: white; margin-bottom: 30px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .blog-card img { width: 100%; height: 300px; object-fit: cover; }
-        .blog-info { padding: 20px; }
-        .blog-info h2 { color: #011f4b; margin: 0 0 10px 0; }
-        .blog-info p { white-space: pre-line; color: #555; }
+        :root { --primary: #011f4b; --gold: #ffd700; --bg: #f4f7f6; }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: var(--bg); margin: 0; padding: 0; line-height: 1.6; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
+        
+        .blog-card { background: white; margin-bottom: 40px; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .blog-card img { width: 100%; height: 350px; object-fit: cover; }
+        .blog-info { padding: 25px; }
+        .blog-info h2 { color: var(--primary); margin: 0 0 10px 0; font-size: 24px; }
+        .blog-info small { color: #888; display: block; margin-bottom: 15px; }
+        .blog-info p { white-space: pre-line; color: #444; font-size: 16px; }
 
-        .blog-tag {
-    color: #005b96;
-    text-decoration: none;
-    font-weight: bold;
-}
-.blog-tag:hover { text-decoration: underline; }
+        /* Tags Styling */
+        .blog-tag { color: #005b96; text-decoration: none; font-weight: bold; margin-right: 5px; }
+        .blog-tag:hover { text-decoration: underline; }
 
-.blog-actions {
-    display: flex;
-    gap: 20px;
-    padding: 15px;
-    border-top: 1px solid #eee;
-    margin-top: 10px;
-}
-.action-btn {
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: 0.3s;
-}
-.action-btn:hover { color: #011f4b; }
-.action-btn i { font-size: 20px; }
+        /* Actions (Like, Comment, Share) */
+        .blog-actions { display: flex; gap: 25px; padding: 15px 25px; border-top: 1px solid #f0f0f0; background: #fafafa; }
+        .action-btn { background: none; border: none; color: #555; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-family: inherit; font-weight: 600; }
+        .action-btn:hover { color: var(--primary); }
+        .action-btn i { font-size: 18px; }
+        .liked { color: #e74c3c !important; }
 
-.comment-area { padding: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
-.comment-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
-.single-comment { background: #fff; padding: 10px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid #011f4b; font-size: 14px; }
-.single-comment strong { color: #011f4b; display: block; margin-bottom: 2px; }
+        /* Comment Section */
+        .comment-area { padding: 20px; background: #f9f9f9; border-top: 1px solid #eee; }
+        .comment-list { max-height: 250px; overflow-y: auto; margin-bottom: 20px; }
+        .single-comment { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .single-comment strong { color: var(--primary); display: block; font-size: 14px; margin-bottom: 3px; }
+        .single-comment span { color: #555; font-size: 14px; }
 
-.comment-input-box input, .comment-input-box textarea {
-    width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;
-}
-.btn-post { background: #011f4b; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-</style>
+        .comment-input-box input, .comment-input-box textarea {
+            width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit;
+        }
+        .btn-post { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn-post:hover { background: #002d72; }
+
+        @media (max-width: 600px) { .blog-card img { height: 200px; } .blog-actions { gap: 15px; } }
+    </style>
 </head>
 <body>
+
     <div class="container">
-        <h1 style="text-align: center; margin: 30px 0;">বিশ্বকাপ স্পেশাল নিউজ</h1>
+        <h1 style="text-align: center; color: var(--primary); margin: 40px 0;">
+            <i class="fas fa-newspaper"></i> বিশ্বকাপ স্পেশাল নিউজ
+        </h1>
+        
+        <!-- এই কন্টেইনারে সব ব্লগ লোড হবে -->
         <div id="blog-container">
-            <p style="text-align: center;">ব্লগ লোড হচ্ছে...</p>
+            <p style="text-align: center; padding: 50px;">ব্লগ লোড হচ্ছে...</p>
         </div>
     </div>
 
-   <div class="blog-actions">
-        <button onclick="likeBlog('${blog._id}')" class="action-btn">
-            <i class="far fa-heart"></i> 
-            <span id="like-count-${blog._id}">${blog.likes || 0}</span>
-        </button>
-        <button onclick="toggleComment('${blog._id}')" class="action-btn">
-            <i class="far fa-comment"></i> কমেন্ট
-        </button>
-        <button onclick="shareBlog('${blog.title}', '${window.location.href}')" class="action-btn">
-            <i class="fas fa-share-alt"></i> শেয়ার
-    </button>
-    </div>
-
-    <!-- কমেন্ট সেকশন (শুরুতে হাইড থাকবে) -->
-<div id="comment-section-${blog._id}" class="comment-area" style="display:none;">
-    <div class="comment-list" id="comment-list-${blog._id}">
-        <!-- এখানে আগের কমেন্টগুলো দেখাবে -->
-    </div>
-    
-    <div class="comment-input-box">
-        <input type="text" id="comm-name-${blog._id}" placeholder="আপনার নাম">
-        <textarea id="comm-text-${blog._id}" placeholder="আপনার মন্তব্য লিখুন..."></textarea>
-        <button onclick="postComment('${blog._id}')" class="btn-post">মতামত দিন</button>
-    </div>
-</div>
-
     <script>
-
-        // loadBlogs() ফাংশনের ভেতর যেখানে লুপ চলছে
-        let commentsHTML = '';
-        if(blog.comments) {
-            blog.comments.forEach(c => {
-                commentsHTML += `
-                <div class="single-comment">
-                    <strong>${c.name}</strong>
-                    <span>${c.text}</span>
-                </div>`;
-            });
+        // ১. হ্যাশট্যাগগুলোকে লিঙ্কে রূপান্তর করার ফাংশন
+        function linkifyTags(text) {
+            return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
         }
-        document.getElementById(`comment-list-${blog._id}`).innerHTML = commentsHTML;
 
+        // ২. লাইক করার ফাংশন
         async function likeBlog(id) {
-        const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
-            if(res.ok) {
-                const countSpan = document.getElementById(`like-count-${id}`);
-                countSpan.innerText = parseInt(countSpan.innerText) + 1;
-            }
+            try {
+                const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
+                if(res.ok) {
+                    const countSpan = document.getElementById(`like-count-${id}`);
+                    const btn = countSpan.parentElement;
+                    countSpan.innerText = parseInt(countSpan.innerText) + 1;
+                    btn.classList.add('liked');
+                    btn.onclick = null; // একবার লাইক দিলে আর কাজ করবে না
+                }
+            } catch (err) { console.error(err); }
         }
 
-        function shareBlog(title, url) {
+        // ৩. শেয়ার করার ফাংশন
+        function shareBlog(title) {
+            const url = window.location.href;
             if (navigator.share) {
-                navigator.share({ title: title, url: url });
+                navigator.share({ title: title, url: url }).catch(console.error);
             } else {
                 alert("লিঙ্কটি কপি করুন: " + url);
             }
         }
 
+        // ৪. কমেন্ট বক্স দেখানো/লুকানো
         function toggleComment(id) {
             const box = document.getElementById(`comment-section-${id}`);
             box.style.display = box.style.display === "none" ? "block" : "none";
         }
 
+        // ৫. কমেন্ট পোস্ট করার ফাংশন
         async function postComment(id) {
             const name = document.getElementById(`comm-name-${id}`).value;
             const text = document.getElementById(`comm-text-${id}`).value;
 
             if(!name || !text) return alert("দয়া করে নাম ও মন্তব্য লিখুন");
 
-            const res = await fetch(`/api/blogs/comment/${id}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, text })
-            });
+            try {
+                const res = await fetch(`/api/blogs/comment/${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, text })
+                });
 
-            if(res.ok) {
-                alert("আপনার মন্তব্য সফলভাবে যোগ হয়েছে!");
-                location.reload(); // পেজ রিফ্রেশ করে নতুন কমেন্ট দেখাবে
+                if(res.ok) {
+                    alert("আপনার মন্তব্য সফলভাবে যোগ হয়েছে!");
+                    location.reload(); 
+                }
+            } catch (err) { alert("সার্ভারে সমস্যা হয়েছে।"); }
+        }
+
+        // ৬. ডাটাবেস থেকে সব ব্লগ লোড করা (মেইন ফাংশন)
+        async function loadBlogs() {
+            try {
+                const res = await fetch('/api/blogs');
+                const blogs = await res.json();
+                const container = document.getElementById('blog-container');
+                container.innerHTML = '';
+
+                if(blogs.length === 0) {
+                    container.innerHTML = "<p style='text-align:center;'>আপাতত কোনো নিউজ নেই।</p>";
+                    return;
+                }
+
+                blogs.forEach(blog => {
+                    // প্রতিটি ব্লগের জন্য কমেন্ট লিস্ট তৈরি
+                    let commentsHTML = '';
+                    if(blog.comments && blog.comments.length > 0) {
+                        blog.comments.forEach(c => {
+                            commentsHTML += `
+                                <div class="single-comment">
+                                    <strong>${c.name}</strong>
+                                    <span>${c.text}</span>
+                                </div>`;
+                        });
+                    } else {
+                        commentsHTML = "<p style='font-size:12px; color:#888;'>প্রথম মন্তব্যটি আপনিই করুন!</p>";
+                    }
+
+                    // ব্লগ কার্ডের পূর্ণাঙ্গ HTML
+                    const blogHTML = `
+                        <div class="blog-card">
+                            ${blog.imageUrl ? `<img src="${blog.imageUrl}" alt="${blog.title}">` : ''}
+                            
+                            <div class="blog-info">
+                                <h2>${blog.title}</h2>
+                                <small><i class="far fa-calendar-alt"></i> তারিখ: ${new Date(blog.createdAt).toLocaleDateString('bn-BD')}</small>
+                                <p>${linkifyTags(blog.content)}</p>
+                            </div>
+
+                            <div class="blog-actions">
+                                <button onclick="likeBlog('${blog._id}')" class="action-btn">
+                                    <i class="fas fa-heart"></i> <span id="like-count-${blog._id}">${blog.likes || 0}</span>
+                                </button>
+                                <button onclick="toggleComment('${blog._id}')" class="action-btn">
+                                    <i class="fas fa-comment"></i> কমেন্ট
+                                </button>
+                                <button onclick="shareBlog('${blog.title}')" class="action-btn">
+                                    <i class="fas fa-share-alt"></i> শেয়ার
+                                </button>
+                            </div>
+
+                            <div id="comment-section-${blog._id}" class="comment-area" style="display:none;">
+                                <div class="comment-list" id="comment-list-${blog._id}">
+                                    ${commentsHTML}
+                                </div>
+                                <div class="comment-input-box">
+                                    <input type="text" id="comm-name-${blog._id}" placeholder="আপনার নাম">
+                                    <textarea id="comm-text-${blog._id}" placeholder="মন্তব্য লিখুন..." rows="3"></textarea>
+                                    <button onclick="postComment('${blog._id}')" class="btn-post">মতামত দিন</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += blogHTML;
+                });
+            } catch (err) {
+                document.getElementById('blog-container').innerHTML = "<p style='text-align:center;'>সার্ভার কানেক্ট হতে পারছে না!</p>";
             }
         }
-        function linkifyTags(text) {
-           return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
-        }
-        async function loadBlogs() {
-            const res = await fetch('/api/blogs');
-            const blogs = await res.json();
-            const container = document.getElementById('blog-container');
-            container.innerHTML = '';
 
-            blogs.forEach(blog => {
-                container.innerHTML += `
-                    <div class="blog-card">
-                        ${blog.imageUrl ? `<img src="${blog.imageUrl}">` : ''}
-                        <div class="blog-info">
-                            <h2>${blog.title}</h2>
-                            <small>তারিখ: ${new Date(blog.createdAt).toLocaleDateString('bn-BD')}</small>
-                            <p>${blog.content}</p>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        loadBlogs();
+        // পেজ লোড হলে ফাংশনটি চালু হবে
+        window.onload = loadBlogs;
     </script>
 </body>
 </html>
