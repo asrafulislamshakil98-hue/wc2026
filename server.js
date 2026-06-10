@@ -202,11 +202,29 @@ app.get('/api/points-table', async (req, res) => {
 });
 
 // ব্লগ স্কিমা
+// ব্লগ স্কিমা আপডেট (server.js এ ব্লগ স্কিমাটি খুঁজে এটি বসান)
 const BlogSchema = new mongoose.Schema({
     title: String,
     content: String,
     imageUrl: String,
+    likes: { type: Number, default: 0 },
+    comments: [{ 
+        name: String, 
+        text: String, 
+        date: { type: Date, default: Date.now } 
+    }], // কমেন্টের জন্য অ্যারে
     createdAt: { type: Date, default: Date.now }
+});
+
+// কমেন্ট সেভ করার API (server.js এর শেষে যোগ করুন)
+app.post('/api/blogs/comment/:id', async (req, res) => {
+    try {
+        const { name, text } = req.body;
+        const blog = await Blog.findById(req.params.id);
+        blog.comments.push({ name, text });
+        await blog.save();
+        res.status(200).json(blog.comments);
+    } catch (err) { res.status(500).send(err); }
 });
 const Blog = mongoose.model('Blog', BlogSchema);
 
@@ -216,6 +234,13 @@ app.post('/api/add-blog', async (req, res) => {
         const newBlog = new Blog(req.body);
         await newBlog.save();
         res.status(201).json({ message: "Blog added!" });
+    } catch (err) { res.status(500).send(err); }
+});
+
+app.put('/api/blogs/like/:id', async (req, res) => {
+    try {
+        await Blog.findByIdAndUpdate(req.params.id, { $inc: { likes: 1 } });
+        res.status(200).send("Liked");
     } catch (err) { res.status(500).send(err); }
 });
 

@@ -10,7 +10,45 @@
         .blog-info { padding: 20px; }
         .blog-info h2 { color: #011f4b; margin: 0 0 10px 0; }
         .blog-info p { white-space: pre-line; color: #555; }
-    </style>
+
+        .blog-tag {
+    color: #005b96;
+    text-decoration: none;
+    font-weight: bold;
+}
+.blog-tag:hover { text-decoration: underline; }
+
+.blog-actions {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+}
+.action-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+.action-btn:hover { color: #011f4b; }
+.action-btn i { font-size: 20px; }
+
+.comment-area { padding: 15px; background: #f9f9f9; border-top: 1px solid #eee; }
+.comment-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
+.single-comment { background: #fff; padding: 10px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid #011f4b; font-size: 14px; }
+.single-comment strong { color: #011f4b; display: block; margin-bottom: 2px; }
+
+.comment-input-box input, .comment-input-box textarea {
+    width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;
+}
+.btn-post { background: #011f4b; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+</style>
 </head>
 <body>
     <div class="container">
@@ -20,7 +58,45 @@
         </div>
     </div>
 
+    <div class="blog-actions">
+        <button onclick="likeBlog('${blog._id}')" class="action-btn">
+            <i class="far fa-heart"></i> <span id="like-count-${blog._id}">${blog.likes || 0}</span>
+        </button>
+        <button onclick="toggleComment('${blog._id}')" class="action-btn">
+            <i class="far fa-comment"></i> কমেন্ট
+        </button>
+        <button onclick="shareBlog('${blog.title}', '${window.location.href}')" class="action-btn">
+            <i class="fas fa-share-alt"></i> শেয়ার
+        </button>
+    </div>
+
+    <!-- কমেন্ট সেকশন (শুরুতে হাইড থাকবে) -->
+<div id="comment-section-${blog._id}" class="comment-area" style="display:none;">
+    <div class="comment-list" id="comment-list-${blog._id}">
+        <!-- এখানে আগের কমেন্টগুলো দেখাবে -->
+    </div>
+    
+    <div class="comment-input-box">
+        <input type="text" id="comm-name-${blog._id}" placeholder="আপনার নাম">
+        <textarea id="comm-text-${blog._id}" placeholder="আপনার মন্তব্য লিখুন..."></textarea>
+        <button onclick="postComment('${blog._id}')" class="btn-post">মতামত দিন</button>
+    </div>
+</div>
+
     <script>
+
+        // loadBlogs() ফাংশনের ভেতর যেখানে লুপ চলছে
+        let commentsHTML = '';
+        if(blog.comments) {
+            blog.comments.forEach(c => {
+                commentsHTML += `
+                <div class="single-comment">
+                    <strong>${c.name}</strong>
+                    <span>${c.text}</span>
+                </div>`;
+            });
+        }
+        document.getElementById(`comment-list-${blog._id}`).innerHTML = commentsHTML;
         async function loadBlogs() {
             const res = await fetch('/api/blogs');
             const blogs = await res.json();
@@ -40,6 +116,53 @@
                 `;
             });
         }
+        // টেক্সট থেকে হ্যাশট্যাগ খুঁজে সেগুলোকে লিঙ্ক বানানোর ফাংশন
+        function linkifyTags(text) {
+           return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
+        }
+
+        // লাইক করার ফাংশন
+async function likeBlog(id) {
+    const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
+    if(res.ok) {
+        const countSpan = document.getElementById(`like-count-${id}`);
+        countSpan.innerText = parseInt(countSpan.innerText) + 1;
+    }
+}
+
+// শেয়ার করার ফাংশন (মোবাইল বা পিসির ডিফল্ট শেয়ার অপশন ওপেন হবে)
+function shareBlog(title, url) {
+    if (navigator.share) {
+        navigator.share({ title: title, url: url });
+    } else {
+        alert("লিঙ্কটি কপি করুন: " + url);
+    }
+}
+
+// কমেন্ট বক্স দেখানো বা লুকানো
+function toggleComment(id) {
+    const box = document.getElementById(`comment-section-${id}`);
+    box.style.display = box.style.display === "none" ? "block" : "none";
+}
+
+// নতুন কমেন্ট পোস্ট করা
+async function postComment(id) {
+    const name = document.getElementById(`comm-name-${id}`).value;
+    const text = document.getElementById(`comm-text-${id}`).value;
+
+    if(!name || !text) return alert("দয়া করে নাম ও মন্তব্য লিখুন");
+
+    const res = await fetch(`/api/blogs/comment/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, text })
+    });
+
+    if(res.ok) {
+        alert("আপনার মন্তব্য সফলভাবে যোগ হয়েছে!");
+        location.reload(); // পেজ রিফ্রেশ করে নতুন কমেন্ট দেখাবে
+    }
+}
         loadBlogs();
     </script>
 </body>
