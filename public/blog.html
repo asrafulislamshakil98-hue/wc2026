@@ -58,16 +58,17 @@
         </div>
     </div>
 
-    <div class="blog-actions">
+   <div class="blog-actions">
         <button onclick="likeBlog('${blog._id}')" class="action-btn">
-            <i class="far fa-heart"></i> <span id="like-count-${blog._id}">${blog.likes || 0}</span>
+            <i class="far fa-heart"></i> 
+            <span id="like-count-${blog._id}">${blog.likes || 0}</span>
         </button>
         <button onclick="toggleComment('${blog._id}')" class="action-btn">
             <i class="far fa-comment"></i> কমেন্ট
         </button>
         <button onclick="shareBlog('${blog.title}', '${window.location.href}')" class="action-btn">
             <i class="fas fa-share-alt"></i> শেয়ার
-        </button>
+    </button>
     </div>
 
     <!-- কমেন্ট সেকশন (শুরুতে হাইড থাকবে) -->
@@ -97,6 +98,48 @@
             });
         }
         document.getElementById(`comment-list-${blog._id}`).innerHTML = commentsHTML;
+
+        async function likeBlog(id) {
+        const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
+            if(res.ok) {
+                const countSpan = document.getElementById(`like-count-${id}`);
+                countSpan.innerText = parseInt(countSpan.innerText) + 1;
+            }
+        }
+
+        function shareBlog(title, url) {
+            if (navigator.share) {
+                navigator.share({ title: title, url: url });
+            } else {
+                alert("লিঙ্কটি কপি করুন: " + url);
+            }
+        }
+
+        function toggleComment(id) {
+            const box = document.getElementById(`comment-section-${id}`);
+            box.style.display = box.style.display === "none" ? "block" : "none";
+        }
+
+        async function postComment(id) {
+            const name = document.getElementById(`comm-name-${id}`).value;
+            const text = document.getElementById(`comm-text-${id}`).value;
+
+            if(!name || !text) return alert("দয়া করে নাম ও মন্তব্য লিখুন");
+
+            const res = await fetch(`/api/blogs/comment/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, text })
+            });
+
+            if(res.ok) {
+                alert("আপনার মন্তব্য সফলভাবে যোগ হয়েছে!");
+                location.reload(); // পেজ রিফ্রেশ করে নতুন কমেন্ট দেখাবে
+            }
+        }
+        function linkifyTags(text) {
+           return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
+        }
         async function loadBlogs() {
             const res = await fetch('/api/blogs');
             const blogs = await res.json();
@@ -116,53 +159,7 @@
                 `;
             });
         }
-        // টেক্সট থেকে হ্যাশট্যাগ খুঁজে সেগুলোকে লিঙ্ক বানানোর ফাংশন
-        function linkifyTags(text) {
-           return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
-        }
 
-        // লাইক করার ফাংশন
-async function likeBlog(id) {
-    const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
-    if(res.ok) {
-        const countSpan = document.getElementById(`like-count-${id}`);
-        countSpan.innerText = parseInt(countSpan.innerText) + 1;
-    }
-}
-
-// শেয়ার করার ফাংশন (মোবাইল বা পিসির ডিফল্ট শেয়ার অপশন ওপেন হবে)
-function shareBlog(title, url) {
-    if (navigator.share) {
-        navigator.share({ title: title, url: url });
-    } else {
-        alert("লিঙ্কটি কপি করুন: " + url);
-    }
-}
-
-// কমেন্ট বক্স দেখানো বা লুকানো
-function toggleComment(id) {
-    const box = document.getElementById(`comment-section-${id}`);
-    box.style.display = box.style.display === "none" ? "block" : "none";
-}
-
-// নতুন কমেন্ট পোস্ট করা
-async function postComment(id) {
-    const name = document.getElementById(`comm-name-${id}`).value;
-    const text = document.getElementById(`comm-text-${id}`).value;
-
-    if(!name || !text) return alert("দয়া করে নাম ও মন্তব্য লিখুন");
-
-    const res = await fetch(`/api/blogs/comment/${id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, text })
-    });
-
-    if(res.ok) {
-        alert("আপনার মন্তব্য সফলভাবে যোগ হয়েছে!");
-        location.reload(); // পেজ রিফ্রেশ করে নতুন কমেন্ট দেখাবে
-    }
-}
         loadBlogs();
     </script>
 </body>
