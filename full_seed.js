@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// মঙ্গোডিবি স্কিমা (আপনার প্রোজেক্টের সব ফিচারের সাথে মিল রেখে)
 const MatchSchema = new mongoose.Schema({
     teamA: String,
     teamB: String,
@@ -21,7 +20,6 @@ const MatchSchema = new mongoose.Schema({
 });
 
 const Match = mongoose.model('Match', MatchSchema);
-// ২. আপনার দেওয়া স্কোয়াড ডাটাবেস (অটোমেটিক বসানোর জন্য)
 const squadsData = {
     "mexico": "Guillermo Ochoa, Luis Malagón, Edson Álvarez, Johan Vásquez, César Montes, Jesús Gallardo, Jorge Sánchez, Luis Chávez, Orbelín Pineda, Erick Sánchez, Alexis Vega, Raúl Jiménez, Santiago Giménez, Julián Quiñones, Hirving Lozano",
     "south africa": "Ronwen Williams, Ricardo Goss, Teboho Mokoena, Mothobi Mvala, Siyanda Xulu, Grant Kekana, Khuliso Mudau, Percy Tau, Evidence Makgopa, Themba Zwane, Oswin Appollis, Zakhele Lepasa, Sphephelo Sithole, Nkosinathi Sibisi, Thapelo Morena",
@@ -35,16 +33,11 @@ const squadsData = {
     
 };
 
-
-
-// ৩. অটোমেটিক লাইনআপ পাওয়ার হেল্পার ফাংশন
 const getSquad = (teamName) => {
     const name = teamName.toLowerCase().trim();
     return squadsData[name] || "স্কোয়াড এখনো ঘোষণা করা হয়নি।";
 };
 
-
-// পতাকা ম্যাপিং ফাংশন (ইমেজে থাকা সব দেশ এখানে আছে)
 const getFlag = (team) => {
     const codes = {
         "mexico": "mx", "south africa": "za", "korea republic": "kr", "czechia": "cz",
@@ -65,7 +58,6 @@ const getFlag = (team) => {
     return `https://flagcdn.com/w160/${code}.png`;
 };
 
-// ইমেজের সময়সূচী অনুযায়ী ডাটা (বাংলাদেশ সময় BST - UTC+6)
 const fixturesData = [
     // --- জুন ১২ ---
     { a: "Mexico", b: "South Africa", d: "2026-06-12T01:00:00+06:00", v: "Azteca Stadium" },
@@ -164,7 +156,6 @@ const fixturesData = [
     { a: "Jordan", b: "Argentina", d: "2026-06-28T08:00:00+06:00", v: "USA" },
 ];
 
-// ১০৪টি ম্যাচ পূর্ণ করার লজিক
 async function seedDatabase() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -175,7 +166,6 @@ async function seedDatabase() {
 
         const finalMatches = [];
 
-        // ১. ইমেজে থাকা রিয়েল ম্যাচগুলো যোগ করা (প্রায় ৪০টির মতো)
         fixturesData.forEach(m => {
             finalMatches.push({
                 teamA: m.a,
@@ -184,13 +174,12 @@ async function seedDatabase() {
                 teamBFlag: getFlag(m.b),
                 matchDate: new Date(m.d),
                 venue: m.v,
-                lineupA: getSquad(m.a), // এখানে স্কোয়াড যোগ হচ্ছে
-                lineupB: getSquad(m.b), // এখানে স্কোয়াড যোগ হচ্ছে
+                lineupA: getSquad(m.a), 
+                lineupB: getSquad(m.b), 
                 isLive: false
             });
         });
 
-        // ২. গ্রুপ পর্বের বাকি ম্যাচগুলো জেনারেট করা (মোট ৭২টি গ্রুপ ম্যাচ পূর্ণ করতে)
         const currentCount = finalMatches.length;
         for (let i = currentCount + 1; i <= 72; i++) {
             finalMatches.push({
@@ -198,7 +187,7 @@ async function seedDatabase() {
                 teamB: `Opponent ${i}`,
                 teamAFlag: getFlag("un"),
                 teamBFlag: getFlag("un"),
-                matchDate: new Date(2026, 5, 20, 18, 0), // জুন ২০, সন্ধ্যা ৬টা
+                matchDate: new Date(2026, 5, 20, 18, 0), 
                 venue: "USA/Canada/Mexico Stadium",
                 lineupA: "স্কোয়াড এখনো ঘোষণা করা হয়নি।",
                 lineupB: "স্কোয়াড এখনো ঘোষণা করা হয়নি।",
@@ -206,7 +195,6 @@ async function seedDatabase() {
             });
         }
 
-        // ৩. নকআউট পর্ব (রাউন্ড ৩২, ১৬, কোয়ার্টার, সেমি ও ফাইনাল - মোট ৩২টি ম্যাচ)
         for (let i = 73; i <= 103; i++) {
             finalMatches.push({
                 teamA: `Winner Match ${i-72}`,
@@ -221,7 +209,6 @@ async function seedDatabase() {
             });
         }
 
-        // ৪. গ্র্যান্ড ফাইনাল (১০৪ নম্বর ম্যাচ)
         finalMatches.push({
             teamA: "Finalist 1",
             teamB: "Finalist 2",

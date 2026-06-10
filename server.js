@@ -9,25 +9,16 @@ const app = express();
 
 app.use((req, res, next) => {
     const host = req.get('host');
-    // আপনার পুরনো রেন্ডার লিঙ্কটি এখানে হুবহু দিতে হবে
     if (host === 'world-cup-2026-oxof.onrender.com') {
-        // এখানে আপনার নতুন ডোমেইন লিঙ্কটি দিন
         return res.redirect(301, 'https://footballdoniya.com' + req.url);
     }
     next();
 });
 
 app.use(express.static('views'));
-
-
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// অ্যাডমিন পেজ পাসওয়ার্ড দিয়ে সুরক্ষিত করা
-
-app.use(express.static('public')); // static ফাইল (html, css, js) এর জন্য
-
+app.use(express.static('public')); 
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected!"))
@@ -47,7 +38,6 @@ const MatchSchema = new mongoose.Schema({
 
 
 const Match = mongoose.model('Match', MatchSchema);
-// ম্যাচের যেকোনো তথ্য আপডেট করার API
 app.put('/api/edit-match/:id', async (req, res) => {
     try {
         const updatedMatch = await Match.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -56,8 +46,7 @@ app.put('/api/edit-match/:id', async (req, res) => {
         res.status(500).json({ message: "Update failed" });
     }
 });
-// API Routes
-// ১. সব ম্যাচের লিস্ট পাওয়া
+
 app.get('/api/matches', async (req, res) => {
     try {
         const matches = await Match.find().sort({ matchDate: 1 });
@@ -67,7 +56,6 @@ app.get('/api/matches', async (req, res) => {
     }
 });
 
-// ২. নতুন ম্যাচ অ্যাড করা (এটি আপনি পরে অ্যাডমিন প্যানেল দিয়ে করবেন)
 app.post('/api/add-match', async (req, res) => {
     const newMatch = new Match(req.body);
     try {
@@ -78,7 +66,6 @@ app.post('/api/add-match', async (req, res) => {
     }
 });
 
-// লাইভ স্ট্যাটাস আপডেট করার API
 app.put('/api/update-live/:id', async (req, res) => {
     try {
         await Match.findByIdAndUpdate(req.params.id, { isLive: req.body.isLive });
@@ -88,12 +75,11 @@ app.put('/api/update-live/:id', async (req, res) => {
     }
 });
 
-// ম্যাচ ডিলিট করার API
 app.delete('/api/delete-match/:id', async (req, res) => {
     await Match.findByIdAndDelete(req.params.id);
     res.json({ message: "Deleted" });
 });
-// একটি নির্দিষ্ট ম্যাচের তথ্য পাওয়ার API
+
 app.get('/api/match/:id', async (req, res) => {
     try {
         const match = await Match.findById(req.params.id);
@@ -104,7 +90,6 @@ app.get('/api/match/:id', async (req, res) => {
     }
 });
 
-// ম্যাচ ডিলিট করার API
 app.delete('/api/delete-match/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -124,18 +109,17 @@ async function updateLiveScoresFromAPI() {
     console.log("সব লাইভ ম্যাচের স্কোর আপডেট করা হচ্ছে...");
 
     try {
-        // ডাটাবেস থেকে শুধু সেই ম্যাচগুলো খুঁজুন যেগুলো এখন 'Live'
+    
         const liveMatches = await Match.find({ isLive: true });
 
         for (let match of liveMatches) {
-            // যদি ওই ম্যাচের সাথে API-এর কোনো আইডি (apiMatchId) যুক্ত থাকে
             if (match.apiMatchId) {
                 const options = {
                     method: 'GET',
                     url: 'https://api-football-v1.p.rapidapi.com/v3/fixtures',
                     params: { id: match.apiMatchId },
                     headers: {
-                        'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, // .env থেকে কি নিচ্ছে
+                        'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 
                         'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
                     }
                 };
@@ -148,7 +132,6 @@ async function updateLiveScoresFromAPI() {
                     await Match.findByIdAndUpdate(match._id, {
                         scoreA: apiData.goals.home,
                         scoreB: apiData.goals.away,
-                        // গোলদাতাদের তথ্য (অটোমেটিক ইভেন্ট আপডেট)
                         events: apiData.events.map(ev => ({
                             minute: ev.time.elapsed,
                             type: ev.type,
@@ -171,7 +154,6 @@ app.get('/api/points-table', async (req, res) => {
         let teamStats = {};
 
         matches.forEach(m => {
-            // স্কোর না থাকলে হিসাব করবে না
             if (m.scoreA === undefined || m.scoreB === undefined) return;
 
             [m.teamA, m.teamB].forEach(t => {
@@ -180,7 +162,6 @@ app.get('/api/points-table', async (req, res) => {
                 }
             });
 
-            // ম্যাচ কাউন্ট এবং পয়েন্ট হিসাব (যদি স্কোর থাকে)
             if (m.scoreA !== 0 || m.scoreB !== 0) {
                 teamStats[m.teamA].mp += 1;
                 teamStats[m.teamB].mp += 1;
@@ -201,8 +182,6 @@ app.get('/api/points-table', async (req, res) => {
     } catch (err) { res.status(500).send(err); }
 });
 
-// ব্লগ স্কিমা
-// ব্লগ স্কিমা আপডেট (server.js এ ব্লগ স্কিমাটি খুঁজে এটি বসান)
 const BlogSchema = new mongoose.Schema({
     title: String,
     content: String,
@@ -216,7 +195,6 @@ const BlogSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// কমেন্ট সেভ করার API (server.js এর শেষে যোগ করুন)
 app.post('/api/blogs/comment/:id', async (req, res) => {
     try {
         const { name, text } = req.body;
@@ -228,7 +206,6 @@ app.post('/api/blogs/comment/:id', async (req, res) => {
 });
 const Blog = mongoose.model('Blog', BlogSchema);
 
-// ব্লগ সেভ করার API
 app.post('/api/add-blog', async (req, res) => {
     try {
         const newBlog = new Blog(req.body);
@@ -244,28 +221,23 @@ app.put('/api/blogs/like/:id', async (req, res) => {
     } catch (err) { res.status(500).send(err); }
 });
 
-// সব ব্লগ পাওয়ার API
 app.get('/api/blogs', async (req, res) => {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json(blogs);
 });
-// ৩. অটোমেটিক টাইমার সেট করা
-// প্রতি ২ মিনিট (১২০০০০ মিলিসেকেন্ড) পর পর এই ফাংশনটি চলবে
+
 setInterval(updateLiveScoresFromAPI, 120000); 
 
-// ব্লগ এডিট
 app.put('/api/edit-blog/:id', async (req, res) => {
     await Blog.findByIdAndUpdate(req.params.id, req.body);
     res.json({ message: "Updated" });
 });
 
-// ব্লগ ডিলিট
 app.delete('/api/delete-blog/:id', async (req, res) => {
     await Blog.findByIdAndDelete(req.params.id);
     res.json({ message: "Deleted" });
 });
 
-// ১. পয়েন্ট টেবিল মডেল
 const PointSchema = new mongoose.Schema({
     teamName: String,
     teamFlag: String,
@@ -277,13 +249,11 @@ const PointSchema = new mongoose.Schema({
 });
 const Point = mongoose.model('Point', PointSchema);
 
-// ২. সব পয়েন্ট পাওয়ার API (অ্যাডমিন এবং মেইন সাইটের জন্য)
 app.get('/api/all-points', async (req, res) => {
     const points = await Point.find().sort({ pts: -1, teamName: 1 });
     res.json(points);
 });
 
-// ৩. অ্যাডমিন প্যানেল থেকে ম্যানুয়ালি পয়েন্ট আপডেট করার API
 app.put('/api/update-single-point/:id', async (req, res) => {
     try {
         await Point.findByIdAndUpdate(req.params.id, req.body);
@@ -291,8 +261,6 @@ app.put('/api/update-single-point/:id', async (req, res) => {
     } catch (err) { res.status(500).send(err); }
 });
 
-
-// Server Listen
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

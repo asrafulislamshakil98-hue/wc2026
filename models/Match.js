@@ -10,7 +10,7 @@ const matchSchema = new mongoose.Schema({
     scoreB: { type: Number, default: 0 },
     officialStreamUrl: String,
     isLive: { type: Boolean, default: false },
-    streamUrl: String // লাইভ স্ট্রিম লিংক
+    streamUrl: String 
 });
 
 module.exports = mongoose.model('Match', matchSchema);

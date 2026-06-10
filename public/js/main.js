@@ -1,11 +1,9 @@
-let allMatches = []; // সব ম্যাচ এখানে সেভ থাকবে
+let allMatches = []; 
 
-// ১. ডাটা লোড করার মেইন ফাংশন
 async function loadInitialData() {
     const loading = document.getElementById('loading');
     
     try {
-        // ম্যাচ এবং ব্লগ একসাথে ফেচ করা
         const [matchRes, blogRes] = await Promise.all([
             fetch('/api/matches'),
             fetch('/api/blogs')
@@ -16,10 +14,8 @@ async function loadInitialData() {
 
         if (loading) loading.style.display = 'none';
 
-        // শুরুতে ৪টি ম্যাচ দেখানো
         renderMatches(4);
         
-        // সব ব্লগ দেখানো
         renderBlogs(blogs);
 
     } catch (error) {
@@ -28,7 +24,6 @@ async function loadInitialData() {
     }
 }
 
-// ২. ম্যাচগুলো স্ক্রিনে দেখানোর ফাংশন
 function renderMatches(limit) {
     const container = document.getElementById('match-container');
     const moreBtn = document.getElementById('moreMatchesBtn');
@@ -36,14 +31,11 @@ function renderMatches(limit) {
     if (!container) return;
     container.innerHTML = '';
 
-    // যদি ম্যাচ না থাকে
     if (allMatches.length === 0) {
         container.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>কোনো ম্যাচ পাওয়া যায়নি।</p>";
         if (moreBtn) moreBtn.style.display = 'none';
         return;
     }
-
-    // নির্দিষ্ট সংখ্যক ম্যাচ নেওয়া
     const matchesToShow = allMatches.slice(0, limit);
 
     matchesToShow.forEach(match => {
@@ -80,7 +72,6 @@ function renderMatches(limit) {
         container.appendChild(matchCard);
     });
 
-    // বাটন দেখানো বা লুকানোর লজিক
     if (moreBtn) {
         if (limit >= allMatches.length) {
             moreBtn.style.display = 'none';
@@ -90,12 +81,10 @@ function renderMatches(limit) {
     }
 }
 
-// ৩. "আরও ম্যাচ" বাটন ক্লিক করলে যা হবে
 function showAllMatches() {
     renderMatches(allMatches.length);
 }
 
-// ৪. ব্লগগুলো স্ক্রিনে দেখানোর ফাংশন
 function renderBlogs(blogs) {
     const container = document.getElementById('home-blog-container');
     if (!container) return;
@@ -121,7 +110,6 @@ function renderBlogs(blogs) {
     });
 }
 
-// ৫. সার্চ বক্সের কাজ (এটি সব ম্যাচের মধ্যে খুঁজবে)
 const searchInput = document.getElementById('searchInput');
 if (searchInput) {
     searchInput.addEventListener('keyup', (e) => {
@@ -144,5 +132,4 @@ if (searchInput) {
     });
 }
 
-// পেজ লোড হলে ফাংশন চালু করা
 document.addEventListener('DOMContentLoaded', loadInitialData);

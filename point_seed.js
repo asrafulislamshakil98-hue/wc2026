@@ -5,7 +5,6 @@ dotenv.config();
 const Point = mongoose.model('Point', new mongoose.Schema({ teamName: String, teamFlag: String, mp: Number, w: Number, d: Number, l: Number, pts: Number }));
 
 const teams = [
-    // গ্রুপ এ থেকে এল পর্যন্ত ৪৮টি দেশের সম্ভাব্য তালিকা
     { n: "Mexico", f: "mx" }, { n: "South Africa", f: "za" }, { n: "Korea Republic", f: "kr" }, { n: "Czechia", f: "cz" },
     { n: "Canada", f: "ca" }, { n: "Bosnia & Herzegovina", f: "ba" }, { n: "USA", f: "us" }, { n: "Paraguay", f: "py" },
     { n: "Qatar", f: "qa" }, { n: "Switzerland", f: "ch" }, { n: "Brazil", f: "br" }, { n: "Morocco", f: "ma" },
