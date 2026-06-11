@@ -249,5 +249,19 @@ async function saveManualPoint(id) {
     });
     alert("আপডেট হয়েছে!");
 }
-
+document.getElementById('add-video-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        title: document.getElementById('vidTitle').value,
+        youtubeUrl: document.getElementById('vidUrl').value,
+        thumbnail: document.getElementById('vidThumb').value
+    };
+    await fetch('/api/add-video', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+    alert("ভিডিও সফলভাবে আপলোড হয়েছে!");
+    location.reload();
+});
 loadMatches(); loadBlogs();

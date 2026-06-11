@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>ভিডিও গ্যালারি - ২০২৬ বিশ্বকাপ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .video-player-container { background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 30px; }
+        .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .video-card { background: #fff; border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .video-card img { width: 100%; height: 150px; object-fit: cover; }
+        .video-card h3 { padding: 10px; font-size: 15px; margin: 0; color: #011f4b; }
+        @media (max-width: 600px) { .video-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align:center; margin:30px 0;">ভিডিও গ্যালারি</h1>
+
+        <!-- মেইন প্লেয়ার -->
+        <div id="main-player-area" class="video-player-container">
+            <p style="color:white; text-align:center; padding:50px;">ভিডিও লোড হচ্ছে...</p>
+        </div>
+
+        <h2 style="color: #011f4b; border-bottom: 2px solid #ffd700; display:inline-block; padding-bottom:5px;">আরও ভিডিও</h2>
+        
+        <!-- বাকি ভিডিওর গ্রিড -->
+        <div id="video-list-grid" class="video-grid" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        // ইউটিউব ইউআরএল থেকে ভিডিও আইডি নেওয়ার ফাংশন
+        function getYTId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? match[2] : null;
+        }
+
+        async function loadVideos() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vidId = urlParams.get('id');
+            const res = await fetch('/api/videos');
+            const videos = await res.json();
+
+            const playerArea = document.getElementById('main-player-area');
+            const grid = document.getElementById('video-list-grid');
+
+            if(videos.length === 0) return;
+
+            // ১. মেইন ভিডিও সেট করা
+            const currentVid = vidId ? videos.find(v => v._id === vidId) : videos[0];
+            const youtubeId = getYTId(currentVid.youtubeUrl);
+            playerArea.innerHTML = `
+                <iframe width="100%" height="450" src="https://www.youtube.com/embed/${youtubeId}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+                <div style="padding:20px; background:#fff; border-top:5px solid #ffd700;">
+                    <h2 style="margin:0; color:#011f4b;">${currentVid.title}</h2>
+                </div>
+            `;
+
+            // ২. বাকি ভিডিও লিস্ট করা
+            videos.forEach(v => {
+                if(v._id !== currentVid._id) {
+                    grid.innerHTML += `
+                        <div class="video-card" onclick="location.href='video.html?id=${v._id}'">
+                            <img src="${v.thumbnail || 'https://img.youtube.com/vi/'+getYTId(v.youtubeUrl)+'/mqdefault.jpg'}">
+                            <h3>${v.title}</h3>
+                        </div>
+                    `;
+                }
+            });
+        }
+        loadVideos();
+    </script>
+</body>
+</html>

@@ -268,6 +268,25 @@ app.put('/api/update-single-point/:id', async (req, res) => {
     } catch (err) { res.status(500).send(err); }
 });
 
+const VideoSchema = new mongoose.Schema({
+    title: String,
+    youtubeUrl: String,
+    thumbnail: String,
+    createdAt: { type: Date, default: Date.now }
+});
+const Video = mongoose.model('Video', VideoSchema);
+
+app.post('/api/add-video', async (req, res) => {
+    const newVideo = new Video(req.body);
+    await newVideo.save();
+    res.status(201).json({ message: "Video added!" });
+});
+
+app.get('/api/videos', async (req, res) => {
+    const videos = await Video.find().sort({ createdAt: -1 });
+    res.json(videos);
+});
+
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
