@@ -14,7 +14,7 @@ async function loadInitialData() {
 
         if (loading) loading.style.display = 'none';
 
-        renderMatches(4);
+        renderMatches(2);
         
         renderBlogs(blogs);
 
@@ -114,8 +114,7 @@ const searchInput = document.getElementById('searchInput');
 if (searchInput) {
     searchInput.addEventListener('keyup', (e) => {
         const searchString = e.target.value.toLowerCase();
-        
-        // সার্চ করলে আমরা সব ম্যাচ দেখিয়ে দেব যাতে ফিল্টার করতে সুবিধা হয়
+       
         renderMatches(allMatches.length);
         
         const cards = document.querySelectorAll('.match-card');

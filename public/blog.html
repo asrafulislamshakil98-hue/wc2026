@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>সর্বশেষ ফুটবল নিউজ ও ব্লগ | ফুটবল দুনিয়া</title>
     
-    <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
     
@@ -14,7 +13,6 @@
         body { font-family: 'Hind Siliguri', sans-serif; background-color: var(--bg); margin: 0; padding: 0; line-height: 1.6; }
         .container { max-width: 1000px; margin: 30px auto; padding: 0 15px; }
         
-        /* মেইন ব্লগ কার্ড */
         .blog-card { background: white; margin-bottom: 40px; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
         .blog-card img { width: 100%; height: 400px; object-fit: cover; }
         .blog-info { padding: 25px; }
@@ -22,24 +20,20 @@
         .blog-info small { color: #888; display: block; margin-bottom: 15px; }
         .blog-info p { white-space: pre-line; color: #444; font-size: 17px; }
 
-        /* ট্যাগ স্টাইল */
         .blog-tag { color: #005b96; text-decoration: none; font-weight: bold; margin-right: 5px; }
         .blog-tag:hover { text-decoration: underline; }
 
-        /* লাইক, কমেন্ট, শেয়ার বাটন */
         .blog-actions { display: flex; gap: 25px; padding: 15px 25px; border-top: 1px solid #f0f0f0; background: #fafafa; }
         .action-btn { background: none; border: none; color: #555; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-family: inherit; font-weight: 600; }
         .action-btn:hover { color: var(--primary); }
         .liked { color: #e74c3c !important; }
 
-        /* কমেন্ট সেকশন */
         .comment-area { padding: 20px; background: #f9f9f9; border-top: 1px solid #eee; }
         .comment-list { max-height: 250px; overflow-y: auto; margin-bottom: 20px; }
         .single-comment { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary); }
         .comment-input-box input, .comment-input-box textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
         .btn-post { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        /* অন্যান্য ব্লগের গ্রিড (২ কলাম) */
         .blog-grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         .small-blog-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 1px solid #eee; }
         .small-blog-card:hover { transform: translateY(-5px); }
@@ -50,7 +44,6 @@
         @media (max-width: 768px) { .blog-grid-2-col { grid-template-columns: 1fr; } .blog-card img { height: 250px; } }
     </style>
 
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -66,25 +59,20 @@
         <a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:bold;">← হোম পেজে ফিরুন</a>
     </div>
 
-    <!-- ১. বড় করে দেখানো ব্লগের জন্য জায়গা -->
     <div id="single-blog-view">
         <p style="text-align:center;">ব্লগ লোড হচ্ছে...</p>
     </div>
 
-    <!-- ২. বাকি ব্লগগুলোর জন্য টাইটেল -->
     <h2 id="other-blogs-title" style="margin-top: 60px; color: var(--primary); border-bottom: 2px solid var(--gold); display:inline-block; padding-bottom: 5px;">অন্যান্য খবর</h2>
     
-    <!-- ৩. ২ কলামের গ্রিড -->
     <div id="other-blogs-grid" class="blog-grid-2-col"></div>
 </div>
 
 <script>
-    // হ্যাশট্যাগ লিঙ্ক করার ফাংশন
     function linkifyTags(text) {
         return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
     }
 
-    // লাইক ফাংশন
     async function likeBlog(id) {
         try {
             const res = await fetch(`/api/blogs/like/${id}`, { method: 'PUT' });
@@ -96,7 +84,6 @@
         } catch (err) { console.error(err); }
     }
 
-    // শেয়ার ফাংশন
     function shareBlog(title) {
         if (navigator.share) {
             navigator.share({ title: title, url: window.location.href });
@@ -105,13 +92,11 @@
         }
     }
 
-    // কমেন্ট বক্স টগল
     function toggleComment(id) {
         const box = document.getElementById(`comment-section-${id}`);
         box.style.display = box.style.display === "none" ? "block" : "none";
     }
 
-    // কমেন্ট পোস্ট
     async function postComment(id) {
         const name = document.getElementById(`comm-name-${id}`).value;
         const text = document.getElementById(`comm-text-${id}`).value;
@@ -125,7 +110,6 @@
         if(res.ok) { location.reload(); }
     }
 
-    // মেইন লোডিং লজিক
     async function loadPage() {
         const urlParams = new URLSearchParams(window.location.search);
         const blogId = urlParams.get('id');
@@ -142,7 +126,6 @@
                 return;
             }
 
-            // ১. বর্তমান ব্লগ নির্বাচন (আইডি না থাকলে প্রথমটি দেখাবে)
             const currentBlog = blogId ? blogs.find(b => b._id === blogId) : blogs[0];
             
             if(currentBlog) {
@@ -184,7 +167,6 @@
                 `;
             }
 
-            // ২. অন্যান্য ব্লগগুলো ২-কলাম গ্রিডে দেখানো
             blogs.forEach(blog => {
                 if(blog._id !== currentBlog._id) {
                     gridContainer.innerHTML += `

@@ -26,8 +26,8 @@ mongoose.connect(process.env.MONGO_URI)
 const MatchSchema = new mongoose.Schema({
     teamA: String,
     teamB: String,
-    teamAFlag: String, // নতুন
-    teamBFlag: String, // নতুন
+    teamAFlag: String, 
+    teamBFlag: String, 
     matchDate: Date,
     venue: String,
     officialStreamUrl: String,
@@ -128,7 +128,6 @@ async function updateLiveScoresFromAPI() {
                 const apiData = response.data.response[0];
 
                 if (apiData) {
-                    // ২. ডাটাবেস আপডেট করা
                     await Match.findByIdAndUpdate(match._id, {
                         scoreA: apiData.goals.home,
                         scoreB: apiData.goals.away,
@@ -191,7 +190,7 @@ const BlogSchema = new mongoose.Schema({
         name: String, 
         text: String, 
         date: { type: Date, default: Date.now } 
-    }], // কমেন্টের জন্য অ্যারে
+    }], 
     createdAt: { type: Date, default: Date.now }
 });
 
