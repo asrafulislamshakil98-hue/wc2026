@@ -103,6 +103,7 @@ document.getElementById('add-match-form').addEventListener('submit', async (e) =
         lineupA: document.getElementById('lineupA').value, lineupB: document.getElementById('lineupB').value,
         teamAFlag: document.getElementById('flagImgA').src, teamBFlag: document.getElementById('flagImgB').src
     };
+    apiMatchId: document.getElementById('apiMatchId').value
     const url = matchEditMode ? `/api/edit-match/${matchEditId}` : '/api/add-match';
     await fetch(url, { method: matchEditMode ? 'PUT' : 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(matchData)});
     location.reload();
