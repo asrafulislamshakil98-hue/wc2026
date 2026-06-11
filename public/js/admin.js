@@ -1,8 +1,7 @@
 let matchEditMode = false; let matchEditId = null;
 let blogEditMode = false; let blogEditId = null;
-const YT_API_KEY = "AIzaSyBLoZyUB5UIEAD4l4zenIowH1tZeYSQ_6Q"; // আপনার Key দিন
+const YT_API_KEY = "AIzaSyBLoZyUB5UIEAD4l4zenIowH1tZeYSQ_6Q"; 
 
-// --- ১. ট্যাব সুইচিং ফাংশন ---
 function showCard(cardId, btn) {
     document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
@@ -11,7 +10,6 @@ function showCard(cardId, btn) {
     if(cardId === 'points-card') loadPointsEditor();
 }
 
-// --- ২. পতাকা ও স্কোয়াড ম্যাপিং ---
 const countryData = {
     "mexico": { code: "mx", squad: "G. Ochoa, Edson Álvarez, H. Lozano, Santiago Giménez, Raúl Jiménez" },
     "south africa": { code: "za", squad: "Ronwen Williams, T. Mokoena, Percy Tau, Mothobi Mvala, Themba Zwane" },
@@ -73,7 +71,6 @@ function updateMatchUI(inputId, imgId, lineupId) {
     }
 }
 
-// --- ৩. ম্যাচ ম্যানেজমেন্ট ---
 async function loadMatches() {
     const res = await fetch('/api/matches');
     const matches = await res.json();
@@ -129,7 +126,6 @@ async function deleteMatch(id) {
     if(confirm("নিশ্চিত?")) { await fetch(`/api/delete-match/${id}`, {method:'DELETE'}); loadMatches(); }
 }
 
-// --- ৪. ব্লগ ম্যানেজমেন্ট ---
 async function loadBlogs() {
     const res = await fetch('/api/blogs');
     const blogs = await res.json();
@@ -168,7 +164,6 @@ async function deleteBlog(id) {
     if(confirm("ব্লগটি মুছবেন?")) { await fetch(`/api/delete-blog/${id}`, {method:'DELETE'}); loadBlogs(); }
 }
 
-// --- ৫. ইউটিউব সার্চ ---
 async function searchYouTubeLive() {
     const q = document.getElementById('ytSearchInput').value;
     const resDiv = document.getElementById('ytResults');
@@ -192,7 +187,6 @@ function previewVideo(id) {
 }
 function closePreview() { document.getElementById('videoModal').style.display = 'none'; document.getElementById('modalPlayer').innerHTML = ''; }
 
-// পয়েন্ট টেবিল সিঙ্ক করার ফাংশন
 async function syncPoints() {
     const statusText = document.getElementById('sync-status');
     statusText.innerText = "সিঙ্কিং হচ্ছে... দয়া করে অপেক্ষা করুন।";
@@ -219,7 +213,6 @@ async function syncPoints() {
     }
 }
 
-// পয়েন্ট টেবিল লিস্ট লোড করা
 async function loadPointsEditor() {
     const res = await fetch('/api/all-points');
     const points = await res.json();
@@ -240,7 +233,6 @@ async function loadPointsEditor() {
     });
 }
 
-// ম্যানুয়ালি সেভ করার ফাংশন
 async function saveManualPoint(id) {
     const updatedData = {
         mp: document.getElementById(`mp-${id}`).value,
