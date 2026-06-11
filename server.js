@@ -226,6 +226,14 @@ app.get('/api/blogs', async (req, res) => {
     res.json(blogs);
 });
 
+app.get('/api/blog/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findById(req.params.id);
+        res.json(blog);
+    } catch (err) {
+        res.status(404).json({ message: "Blog not found" });
+    }
+});
 setInterval(updateLiveScoresFromAPI, 120000); 
 
 app.put('/api/edit-blog/:id', async (req, res) => {
