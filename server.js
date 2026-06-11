@@ -287,6 +287,24 @@ app.get('/api/videos', async (req, res) => {
     res.json(videos);
 });
 
+app.put('/api/edit-video/:id', async (req, res) => {
+    try {
+        await Video.findByIdAndUpdate(req.params.id, req.body);
+        res.json({ message: "Video updated successfully" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.delete('/api/delete-video/:id', async (req, res) => {
+    try {
+        await Video.findByIdAndDelete(req.params.id);
+        res.json({ message: "Video deleted successfully" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

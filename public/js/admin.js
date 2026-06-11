@@ -1,5 +1,6 @@
 let matchEditMode = false; let matchEditId = null;
 let blogEditMode = false; let blogEditId = null;
+let videoEditMode = false; let videoEditId = null;
 const YT_API_KEY = "AIzaSyBLoZyUB5UIEAD4l4zenIowH1tZeYSQ_6Q"; 
 
 function showCard(cardId, btn) {
@@ -264,4 +265,75 @@ document.getElementById('add-video-form').addEventListener('submit', async (e) =
     alert("ভিডিও সফলভাবে আপলোড হয়েছে!");
     location.reload();
 });
+
+async function loadAdminVideos() {
+    const res = await fetch('/api/videos');
+    const videos = await res.json();
+    const container = document.getElementById('admin-video-container');
+    container.innerHTML = '';
+
+    videos.forEach(v => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+            <div class="list-info">
+                <strong>${v.title}</strong><br>
+                <small>${v.youtubeUrl}</small>
+            </div>
+            <div>
+                <button class="action-btn" style="background:orange" onclick="prepareVideoEdit('${v._id}', '${v.title}', '${v.youtubeUrl}', '${v.thumbnail}')">এডিট</button>
+                <button class="action-btn" style="background:red" onclick="deleteVideo('${v._id}')">ডিলিট</button>
+            </div>`;
+        container.appendChild(div);
+    });
+}
+
+async function deleteVideo(id) {
+    if (confirm("ভিডিওটি ডিলিট করতে চান?")) {
+        await fetch(`/api/delete-video/${id}`, { method: 'DELETE' });
+        loadAdminVideos();
+    }
+}
+
+function prepareVideoEdit(id, title, url, thumb) {
+    videoEditMode = true;
+    videoEditId = id;
+
+    document.getElementById('vidTitle').value = title;
+    document.getElementById('vidUrl').value = url;
+    document.getElementById('vidThumb').value = thumb;
+
+    document.getElementById('match-save-btn').innerText = "ভিডিও আপডেট করুন"; 
+    showCard('video-form-card', document.querySelector('[onclick*="video-form-card"]'));
+}
+
+document.getElementById('add-video-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const videoData = {
+        title: document.getElementById('vidTitle').value,
+        youtubeUrl: document.getElementById('vidUrl').value,
+        thumbnail: document.getElementById('vidThumb').value
+    };
+
+    const url = videoEditMode ? `/api/edit-video/${videoEditId}` : '/api/add-video';
+    const method = videoEditMode ? 'PUT' : 'POST';
+
+    await fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(videoData)
+    });
+
+    alert(videoEditMode ? "ভিডিও আপডেট হয়েছে!" : "ভিডিও যোগ হয়েছে!");
+    location.reload();
+});
+
+function showCard(cardId, btn) {
+    document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(cardId).classList.add('active-card');
+    btn.classList.add('active');
+
+    if(cardId === 'video-list-card') loadAdminVideos();
+}
 loadMatches(); loadBlogs();
