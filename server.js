@@ -248,6 +248,7 @@ app.delete('/api/delete-blog/:id', async (req, res) => {
 const PointSchema = new mongoose.Schema({
     teamName: String,
     teamFlag: String,
+    group: String,
     mp: { type: Number, default: 0 },
     w: { type: Number, default: 0 },
     d: { type: Number, default: 0 },
@@ -266,6 +267,20 @@ app.put('/api/update-single-point/:id', async (req, res) => {
         await Point.findByIdAndUpdate(req.params.id, req.body);
         res.json({ message: "পয়েন্ট সফলভাবে আপডেট হয়েছে!" });
     } catch (err) { res.status(500).send(err); }
+});
+
+app.get('/api/group-points/:teamName', async (req, res) => {
+    try {
+        // প্রথমে ওই টিমটি কোন গ্রুপে আছে তা খুঁজে বের করা
+        const team = await Point.findOne({ teamName: req.params.teamName });
+        if (!team) return res.status(404).json({ message: "টিম পাওয়া যায়নি" });
+
+        // ওই গ্রুপের সব টিমের পয়েন্ট নিয়ে আসা
+        const groupTeams = await Point.find({ group: team.group }).sort({ pts: -1 });
+        res.json({ groupName: team.group, teams: groupTeams });
+    } catch (err) {
+        res.status(500).send(err);
+    }
 });
 
 const VideoSchema = new mongoose.Schema({
