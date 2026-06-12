@@ -115,6 +115,7 @@
             <button class="tab-btn active" onclick="openTab(event, 'timeline-tab')"><i class="fas fa-history"></i> টাইমলাইন</button>
             <button class="tab-btn" onclick="openTab(event, 'stats-tab')"><i class="fas fa-chart-bar"></i> স্ট্যাটাস</button>
             <button class="tab-btn" onclick="openTab(event, 'lineup-tab')"><i class="fas fa-users"></i> লাইনআপ</button>
+            <button class="tab-btn" onclick="openTab(event, 'points-tab')"><i class="fas fa-table"></i> পয়েন্ট টেবিল</button>
             <button class="tab-btn" onclick="openTab(event, 'more-tab')"><i class="fas fa-calendar-alt"></i> অন্যান্য</button>
         </div>
 
@@ -149,6 +150,29 @@
             </a>
             <p id="not-live-msg" style="display:none; color:red; text-align:center; font-weight:bold; margin-top:15px;">খেলা শুরু হলে বাটনটি সচল হবে।</p>
         </div>
+
+        <!-- Tab: Points Table -->
+        <div id="points-tab" class="tab-content">
+            <h3 style="margin-top:0;">গ্রুপ পয়েন্ট টেবিল</h3>
+            <div style="overflow-x: auto;">
+                <table style="width:100%; border-collapse: collapse; font-size: 14px; text-align: center;">
+                    <thead>
+                        <tr style="background: #f4f4f4;">
+                            <th style="padding: 10px; border: 1px solid #eee;">দল</th>
+                            <th style="padding: 10px; border: 1px solid #eee;">MP</th>
+                            <th style="padding: 10px; border: 1px solid #eee;">W</th>
+                            <th style="padding: 10px; border: 1px solid #eee;">D</th>
+                            <th style="padding: 10px; border: 1px solid #eee;">L</th>
+                            <th style="padding: 10px; border: 1px solid #eee;">PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="live-points-body">
+                        <!-- এখানে জাভাস্ক্রিপ্ট ডাটা বসাবে -->
+                        <tr><td colspan="6" style="padding:20px;">লোড হচ্ছে...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 <script>
@@ -170,6 +194,7 @@
 
         evt.currentTarget.classList.add("active");
 
+        if(tabId === 'points-tab') loadLivePointsTable();
         if(tabId === 'more-tab') loadOtherMatches();
     }
 
@@ -228,6 +253,33 @@
             </div>
         `).join('');
     }
+async function loadLivePointsTable() {
+    try {
+        const res = await fetch('/api/all-points'); // আমরা আগে এই API বানিয়েছিলাম
+        const points = await res.json();
+        const body = document.getElementById('live-points-body');
+        
+        body.innerHTML = '';
+        
+        points.forEach(p => {
+            body.innerHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px; text-align: left; display: flex; align-items: center; gap: 8px;">
+                        <img src="${p.teamFlag}" width="20" style="border-radius: 2px;">
+                        <strong>${p.teamName}</strong>
+                    </td>
+                    <td>${p.mp}</td>
+                    <td>${p.w}</td>
+                    <td>${p.d}</td>
+                    <td>${p.l}</td>
+                    <td style="font-weight:bold; color:green;">${p.pts}</td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        document.getElementById('live-points-body').innerHTML = "<tr><td colspan='6'>তথ্য পাওয়া যায়নি।</td></tr>";
+    }
+}
 
     setInterval(fetchMatchDetails, 30000);
     fetchMatchDetails();
