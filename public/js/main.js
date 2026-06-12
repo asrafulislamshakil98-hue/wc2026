@@ -54,7 +54,7 @@ function renderMatches(limit) {
     const sortedMatches = [...upcomingMatches, ...finishedMatches];
 
     // ৩. স্লাইস করা (শুরুতে শুধু আগামী ২’টি বা লিমিট অনুযায়ী ম্যাচ দেখাবে)
-    const matchesToShow = sortedMatches.slice(2, limit);
+    const matchesToShow = sortedMatches.slice(0, limit);
 
     matchesToShow.forEach(match => {
         const matchCard = document.createElement('div');
