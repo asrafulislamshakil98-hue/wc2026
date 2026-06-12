@@ -194,7 +194,10 @@
 
         evt.currentTarget.classList.add("active");
 
-        if(tabId === 'points-tab') loadLivePointsTable();
+        if(tabId === 'points-tab') {
+            const teamAName = document.getElementById('teamA-name').innerText;
+            loadGroupPointsTable(teamAName);
+        }
         if(tabId === 'more-tab') loadOtherMatches();
     }
 
@@ -253,19 +256,22 @@
             </div>
         `).join('');
     }
-async function loadLivePointsTable() {
+async function loadGroupPointsTable(teamName) {
     try {
-        const res = await fetch('/api/all-points'); // আমরা আগে এই API বানিয়েছিলাম
-        const points = await res.json();
+        const res = await fetch(`/api/group-points/${teamName}`);
+        const data = await res.json();
+        
+        // হেডিং পরিবর্তন (যেমন: গ্রুপ এ পয়েন্ট টেবিল)
+        document.querySelector('#points-tab h3').innerText = `${data.groupName} পয়েন্ট টেবিল`;
+
         const body = document.getElementById('live-points-body');
-        
         body.innerHTML = '';
-        
-        points.forEach(p => {
+
+        data.teams.forEach(p => {
             body.innerHTML += `
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 10px; text-align: left; display: flex; align-items: center; gap: 8px;">
-                        <img src="${p.teamFlag}" width="20" style="border-radius: 2px;">
+                        <img src="${p.teamFlag}" width="20">
                         <strong>${p.teamName}</strong>
                     </td>
                     <td>${p.mp}</td>
@@ -277,7 +283,7 @@ async function loadLivePointsTable() {
             `;
         });
     } catch (err) {
-        document.getElementById('live-points-body').innerHTML = "<tr><td colspan='6'>তথ্য পাওয়া যায়নি।</td></tr>";
+        console.error("টেবিল লোড করতে সমস্যা:", err);
     }
 }
 
