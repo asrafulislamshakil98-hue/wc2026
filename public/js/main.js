@@ -38,11 +38,31 @@ function renderMatches(limit) {
         if (moreBtn) moreBtn.style.display = 'none';
         return;
     }
-    const matchesToShow = allMatches.slice(0, limit);
+
+    // --- লজিক শুরু: ম্যাচগুলোকে ফিল্টার এবং সর্ট করা ---
+    const now = new Date();
+    
+    // ১. ভবিষ্যতের এবং বর্তমানে চলছে (Live) এমন ম্যাচগুলো আলাদা করা
+    const upcomingMatches = allMatches.filter(m => new Date(m.matchDate) >= now || m.isLive === true);
+    
+    // ২. শেষ হয়ে যাওয়া ম্যাচগুলো আলাদা করা
+    const finishedMatches = allMatches.filter(m => new Date(m.matchDate) < now && m.isLive === false);
+
+    // ৩. নতুন লিস্ট তৈরি: আগে আসবে সামনের ম্যাচ, তারপর পুরনো ম্যাচ
+    const sortedMatches = [...upcomingMatches, ...finishedMatches];
+
+    // ৪. শুরুতে যদি আমরা লিমিটেড ম্যাচ দেখাই (যেমন ৪টি), তবে সেগুলো শুধু 'Upcoming' থেকে নেবে
+    // কিন্তু যদি 'Upcoming' ৪টির কম থাকে, তবে বাকি জায়গা 'Finished' দিয়ে পূরণ করবে।
+    const matchesToShow = sortedMatches.slice(2, limit);
 
     matchesToShow.forEach(match => {
         const matchCard = document.createElement('div');
         matchCard.className = 'match-card';
+        
+        // যদি ম্যাচ শেষ হয়ে যায়, তবে কার্ডটি একটু হালকা (Blur/Fade) দেখাবে
+        const isFinished = new Date(match.matchDate) < now && !match.isLive;
+        if (isFinished) matchCard.style.opacity = "0.7"; 
+
         matchCard.onclick = () => window.location.href = `live.html?id=${match._id}`;
 
         matchCard.innerHTML = `
@@ -52,7 +72,7 @@ function renderMatches(limit) {
                     <span>${match.teamA}</span>
                 </div>
                 <div class="score-display">
-                    ${match.isLive ? `<span class="live-score">${match.scoreA} - ${match.scoreB}</span>` : '<span class="vs-text">VS</span>'}
+                    ${match.isLive || isFinished ? `<span class="live-score">${match.scoreA} - ${match.scoreB}</span>` : '<span class="vs-text">VS</span>'}
                 </div>
                 <div class="team-info">
                     <img src="${match.teamBFlag || 'https://flagcdn.com/w160/un.png'}" alt="">
@@ -61,17 +81,20 @@ function renderMatches(limit) {
             </div>
             <p class="match-time"><i class="far fa-calendar-alt"></i> ${new Date(match.matchDate).toLocaleString('bn-BD')}</p>
             <p class="match-venue"><i class="fas fa-map-marker-alt"></i> ${match.venue}</p>
+            
             <div class="status-indicator">
                 ${match.isLive ? 
                     '<span class="live-btn-small">🔴 সরাসরি দেখুন</span>' : 
-                    '<span class="upcoming-btn-small">বিস্তারিত দেখুন</span>'}
+                    (isFinished ? '<span class="upcoming-btn-small">ম্যাচ শেষ</span>' : '<span class="upcoming-btn-small">বিস্তারিত দেখুন</span>')
+                }
             </div>
         `;
         container.appendChild(matchCard);
     });
 
+    // বাটন কন্ট্রোল
     if (moreBtn) {
-        if (limit >= allMatches.length) {
+        if (limit >= sortedMatches.length) {
             moreBtn.style.display = 'none';
         } else {
             moreBtn.style.display = 'inline-block';
