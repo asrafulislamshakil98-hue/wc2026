@@ -3,289 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>লাইভ আপডেট - ফুটবল দুনিয়া</title>
-    
-    <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+   <title>লাইভ স্কোর এবং ম্যাচের বিস্তারিত তথ্য | ফুটবল দুনিয়া</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="css/style.css"> <!-- আগের স্টাইল ফাইল -->
     <style>
-        :root { 
-            --primary: #011f4b; 
-            --gold: #ffd700; 
-            --live-red: #ff0000; 
-            --bg: #f0f2f5; 
-            --white: #ffffff;
-        }
+        .live-container { max-width: 800px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; }
+        .scoreboard { display: flex; justify-content: space-around; align-items: center; margin: 20px 0; background: #011f4b; color: white; padding: 30px; border-radius: 10px; }
+        .team-box img { width: 80px; height: 80px; object-fit: contain; }
+        .score { font-size: 48px; font-weight: bold; color: #ffd700; }
+        .live-status { background: red; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .stream-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .official-btn { display: inline-block; background: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); transition: 0.3s; }
+        .official-btn:hover { background: #218838; transform: translateY(-3px); }
+        .venue-info { color: #666; margin-top: 10px; }
 
-        body { font-family: 'Hind Siliguri', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: #333; }
-        .container { max-width: 850px; margin: auto; padding: 15px; }
+        .match-quick-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
 
-        /* Navbar */
-        .top-nav { background: var(--primary); padding: 15px; color: white; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .top-nav a { color: white; text-decoration: none; font-size: 18px; }
+.link-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    transition: 0.3s;
+    flex: 1;
+}
 
-        /* Modern Broadcast Scoreboard */
-        .scoreboard-container { 
-            background: linear-gradient(135deg, #011f4b 0%, #002d72 100%); 
-            color: white; 
-            border-radius: 20px; 
-            padding: 30px 20px; 
-            text-align: center; 
-            position: relative; 
-            box-shadow: 0 10px 25px rgba(1, 31, 75, 0.3);
-            margin-top: 10px;
-        }
-        
-        .live-badge { 
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); 
-            background: var(--live-red); padding: 4px 15px; border-radius: 20px; 
-            font-size: 11px; font-weight: bold; letter-spacing: 1px; animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+.link-item i {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #011f4b; /* আপনার থিমের নীল রঙ */
+    background: #f0f4f8;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.3s;
+}
 
-        .teams-wrap { display: flex; justify-content: space-around; align-items: center; margin-top: 15px; }
-        .team-box { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .team-box img { width: 70px; height: 45px; object-fit: cover; border-radius: 6px; border: 2px solid rgba(255,255,255,0.2); background: white; }
-        .team-box span { font-weight: 700; font-size: 18px; }
+.link-item:hover i {
+    background: #011f4b;
+    color: #ffd700; /* হোভারে গোল্ডেন রঙ */
+    transform: translateY(-3px);
+}
 
-        .score-box { flex: 1; font-size: 55px; font-weight: 800; color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
-        .venue-text { margin-top: 20px; font-size: 13px; opacity: 0.8; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.link-item span {
+    font-weight: 500;
+}
 
-        /* Tabs Navigation */
-        .tab-menu { display: flex; background: var(--white); margin-top: 25px; border-radius: 12px; overflow-x: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .tab-btn { flex: 1; padding: 15px 10px; border: none; background: none; color: #666; font-weight: 600; cursor: pointer; transition: 0.3s; white-space: nowrap; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .tab-btn i { font-size: 18px; }
-        .tab-btn.active { color: var(--primary); border-bottom: 4px solid var(--primary); background: #f8f9ff; }
-
-        /* Content Sections */
-        .tab-content { display: none; background: var(--white); border-radius: 15px; padding: 20px; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 250px; }
-        .active-content { display: block; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Timeline / Events */
-        .event-item { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .time-circle { background: #f0f2f5; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 13px; color: var(--primary); }
-
-        /* Stats Bars */
-        .stat-bar-container { margin-bottom: 18px; }
-        .stat-labels { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 6px; font-size: 14px; }
-        .bar-bg { background: #eee; height: 8px; border-radius: 10px; display: flex; overflow: hidden; }
-        .bar-fill { background: var(--primary); transition: width 1s ease-in-out; }
-
-        /* Table Style */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #f8f9fa; color: var(--primary); padding: 10px; font-size: 12px; }
-        td { padding: 12px 8px; border-bottom: 1px solid #eee; text-align: center; font-size: 14px; }
-        .team-td { text-align: left !important; display: flex; align-items: center; gap: 10px; font-weight: bold; }
-
-        /* Buttons */
-        .watch-btn { display: block; background: #28a745; color: white; text-align: center; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 25px; font-size: 18px; transition: 0.3s; }
-        .watch-btn:hover { background: #218838; transform: scale(1.02); }
-
-        .more-match-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #f1f1f1; cursor: pointer; border-radius: 8px; }
-        .more-match-item:hover { background: #f8f9ff; }
+/* মোবাইলের জন্য গ্যাপ ঠিক করা */
+@media (max-width: 480px) {
+    .match-quick-links {
+        gap: 5px;
+    }
+    .link-item span {
+        font-size: 11px;
+    }
+}
     </style>
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date()); gtag('config', 'G-LYKND7R8XP');
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LYKND7R8XP');
+</script>
 </head>
 <body>
 
-    <div class="top-nav">
-        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
-        <span style="font-weight:bold; font-size:18px;">ফুটবল দুনিয়া লাইভ সেন্টার</span>
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo" onclick="location.href='index.html'" style="cursor:pointer">
+                <i class="fas fa-futbol"></i> World Cup 2026
+            </h1>
+        </div>
+    </nav>
 
-    <div class="container">
-        <!-- Scoreboard -->
-        <div class="scoreboard-container">
-            <div id="status-tag" class="live-badge">UPCOMING</div>
-            <div class="teams-wrap">
-                <div class="team-box">
-                    <img id="teamA-logo" src="" alt="">
-                    <span id="teamA-name">Team 1</span>
-                </div>
-                <div class="score-box" id="main-score">0 - 0</div>
-                <div class="team-box">
-                    <img id="teamB-logo" src="" alt="">
-                    <span id="teamB-name">Team 2</span>
-                </div>
+    <div class="live-container">
+        <div id="match-header">
+            <span class="live-status" id="status-tag">UPCOMING</span>
+            <h2 id="match-title" style="margin-top:15px;">ম্যাচের তথ্য লোড হচ্ছে...</h2>
+        </div>
+
+        <!-- স্কোরবোর্ড -->
+        <div class="scoreboard">
+            <div class="team-box">
+                <img id="teamA-logo" src="https://via.placeholder.com/80" alt="Team A">
+                <h3 id="teamA-name">Team 1</h3>
             </div>
-            <div class="venue-text">
-                <i class="fas fa-map-marker-alt" style="color:var(--gold)"></i> <span id="match-venue">Venue Loading...</span>
-            </div>
-        </div>
-
-        <!-- Tab Navigation -->
-        <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'timeline')"><i class="fas fa-history"></i>টাইমলাইন</button>
-            <button class="tab-btn" onclick="openTab(event, 'stats')"><i class="fas fa-chart-line"></i>পরিসংখ্যান</button>
-            <button class="tab-btn" onclick="openTab(event, 'lineup')"><i class="fas fa-users-viewfinder"></i>একাদশ</button>
-            <button class="tab-btn" onclick="openTab(event, 'points')"><i class="fas fa-table"></i>পয়েন্ট টেবিল</button>
-            <button class="tab-btn" onclick="openTab(event, 'more')"><i class="fas fa-calendar-alt"></i>আরও ম্যাচ</button>
-        </div>
-
-        <!-- Tab Content 1: Timeline -->
-        <div id="timeline" class="tab-content active-content">
-            <h3 style="margin-top:0;">ম্যাচ টাইমলাইন</h3>
-            <div id="timeline-list">ইভেন্ট লোড হচ্ছে...</div>
-        </div>
-
-        <!-- Tab Content 2: Stats -->
-        <div id="stats" class="tab-content">
-            <h3 style="margin-top:0;">ম্যাচ স্ট্যাটস (প্রিভিউ)</h3>
-            <div id="stats-container">
-                <div class="stat-bar-container">
-                    <div class="stat-labels"><span>50%</span><span>বল পজিশন</span><span>50%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
-                </div>
-                <div class="stat-bar-container">
-                    <div class="stat-labels"><span>0</span><span>মোট শট</span><span>0</span></div>
-                    <div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div>
-                </div>
+            <div class="score" id="main-score">0 - 0</div>
+            <div class="team-box">
+                <img id="teamB-logo" src="https://via.placeholder.com/80" alt="Team B">
+                <h3 id="teamB-name">Team 2</h3>
             </div>
         </div>
 
-        <!-- Tab Content 3: Lineups -->
-        <div id="lineup" class="tab-content">
-            <h3 style="margin-top:0;">শুরুর একাদশ</h3>
-            <div id="lineup-display" style="line-height:1.8;">তথ্য লোড হচ্ছে...</div>
-        </div>
+        <p class="venue-info"><i class="fas fa-map-marker-alt"></i> <span id="match-venue">ভেন্যু লোড হচ্ছে...</span></p>
 
-        <!-- Tab Content 4: Points Table -->
-        <div id="points" class="tab-content">
-            <h3 id="group-title" style="margin-top:0;">গ্রুপ টেবিল</h3>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr><th>দল</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>PTS</th></tr>
-                    </thead>
-                    <tbody id="live-points-body">
-                        <!-- জাভাস্ক্রিপ্ট এখানে ডাটা দিবে -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <!-- কুইক লিঙ্ক সেকশন -->
+<div class="match-quick-links">
+    <!-- লাইনআপ বাটনে ম্যাচ আইডি পাঠাতে হবে -->
+    <a id="lineup-link" href="#" class="link-item">
+        <i class="fas fa-users"></i>
+        <span>লাইনআপ</span>
+    </a>
+    <a href="points.html" class="link-item">
+        <i class="fas fa-table"></i>
+        <span>পয়েন্ট টেবিল</span>
+    </a>
+    <a href="index.html" class="link-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>আরও ম্যাচ</span>
+    </a>
+</div>
 
-        <!-- Tab Content 5: More Matches -->
-        <div id="more" class="tab-content">
-            <h3 style="margin-top:0;">আজকের অন্যান্য ম্যাচ</h3>
-            <div id="more-matches-list"></div>
-        </div>
-
-        <!-- Streaming CTA -->
-        <div id="stream-area">
-            <a href="#" id="stream-link" class="watch-btn" target="_blank">
-                <i class="fas fa-play-circle"></i> সরাসরি খেলা দেখুন
+<!-- গোলদাতা ও মিনিটের জন্য টাইমলাইন -->
+<div id="timeline" class="match-events">
+    <!-- এখানে জাভাস্ক্রিপ্ট গোলদাতার নাম বসাবে -->
+</div>
+        <!-- স্ট্রিমিং সেকশন -->
+        <div class="stream-section" id="stream-area">
+            <h3>লাইভ স্ট্রিমিং দেখুন</h3>
+            <p style="margin-bottom: 20px;">অফিসিয়াল ব্রডকাস্টার চ্যানেলে খেলা দেখতে নিচের বাটনে ক্লিক করুন:</p>
+            <a href="#" id="stream-link" class="official-btn" target="_blank">
+                <i class="fas fa-play-circle"></i> Click to Watch Live
             </a>
-            <p id="not-live-msg" style="display:none; color:red; text-align:center; font-weight:bold; margin-top:15px;">খেলা শুরু হলে বাটনটি সচল হবে।</p>
+            <p id="not-live-msg" style="display:none; color: red; font-weight: bold; margin-top: 20px;">
+                খেলাটি এখনো শুরু হয়নি। শুরু হলে বাটনটি সক্রিয় হবে।
+            </p>
         </div>
     </div>
 
 <script>
+    // ১. URL থেকে আইডি নেওয়া
     const urlParams = new URLSearchParams(window.location.search);
     const matchId = urlParams.get('id');
 
-    // ১. ট্যাব ম্যানেজমেন্ট
-    function openTab(evt, tabId) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-content'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active-content');
-        evt.currentTarget.classList.add('active');
-
-        if(tabId === 'points') {
-            const teamName = document.getElementById('teamA-name').innerText;
-            loadGroupPoints(teamName);
-        }
-        if(tabId === 'more') loadMoreMatches();
-    }
-
-    // ২. মেইন ডাটা লোড (স্কোর, টাইমলাইন, লাইনআপ)
     async function fetchMatchDetails() {
-        if (!matchId) return;
+        if (!matchId) {
+            document.getElementById('match-title').innerText = "ম্যাচ পাওয়া যায়নি!";
+            return;
+        }
+
         try {
-            const res = await fetch(`/api/match/${matchId}`);
-            const m = await res.json();
+            const response = await fetch(`/api/match/${matchId}`);
+            const match = await response.json();
 
-            // ডাইনামিক ফিল্ড আপডেট
-            document.getElementById('teamA-name').innerText = m.teamA;
-            document.getElementById('teamB-name').innerText = m.teamB;
-            document.getElementById('match-venue').innerText = m.venue;
-            document.getElementById('main-score').innerText = `${m.scoreA || 0} - ${m.scoreB || 0}`;
-            if(m.teamAFlag) document.getElementById('teamA-logo').src = m.teamAFlag;
-            if(m.teamBFlag) document.getElementById('teamB-logo').src = m.teamBFlag;
+            // ২. বেসিক তথ্য বসানো (টিম নাম, পতাকা, ভেন্যু)
+            document.getElementById('match-title').innerText = `${match.teamA} বনাম ${match.teamB}`;
+            if(match.teamAFlag) document.getElementById('teamA-logo').src = match.teamAFlag;
+            if(match.teamBFlag) document.getElementById('teamB-logo').src = match.teamBFlag;
+            document.getElementById('match-venue').innerText = match.venue;
 
-            // টাইমলাইন রেন্ডার
-            const tList = document.getElementById('timeline-list');
-            if (m.events && m.events.length > 0) {
-                tList.innerHTML = m.events.map(ev => {
-                    let icon = ev.type === 'Goal' ? '⚽' : (ev.type.includes('Yellow') ? '🟨' : '🟥');
-                    return `<div class="event-item"><div class="time-circle">${ev.minute}'</div> <span>${icon} ${ev.player}</span></div>`;
-                }).join('');
-            } else {
-                tList.innerHTML = "<p style='color:#888;'>ম্যাচ শুরু হয়েছে, এখনো কোনো গোল বা কার্ডের ঘটনা ঘটেনি।</p>";
+            // ৩. মেইন স্কোরবোর্ড আপডেট (নতুন যোগ করা হয়েছে)
+            const scoreElement = document.getElementById('main-score');
+            if (scoreElement) {
+                scoreElement.innerText = `${match.scoreA || 0} - ${match.scoreB || 0}`;
             }
 
-            // লাইনআপ রেন্ডার
-            document.getElementById('lineup-display').innerHTML = `
-                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border-left:4px solid var(--primary);">
-                    <strong>${m.teamA}:</strong><br> ${m.lineupA || 'N/A'}<br><br>
-                    <strong>${m.teamB}:</strong><br> ${m.lineupB || 'N/A'}
-                </div>`;
-
-            // লাইভ স্ট্যাটাস বাটন
-            const status = document.getElementById('status-tag');
-            const stream = document.getElementById('stream-link');
-            const msg = document.getElementById('not-live-msg');
-            
-            if (m.isLive) {
-                status.innerText = "🔴 LIVE"; status.style.background = "red";
-                stream.style.display = "block"; stream.href = m.officialStreamUrl;
-                msg.style.display = "none";
-            } else {
-                status.innerText = "UPCOMING"; status.style.background = "#555";
-                stream.style.display = "none"; msg.style.display = "block";
+            // ৪. টাইমলাইন বা গোলদাতার তালিকা আপডেট (নতুন যোগ করা হয়েছে)
+            const timeline = document.getElementById('timeline');
+            if (timeline) {
+                timeline.innerHTML = "<h4>ম্যাচ ইভেন্ট (Events)</h4>";
+                if (match.events && match.events.length > 0) {
+                    match.events.forEach(event => {
+                        // টাইপ অনুযায়ী আইকন সেট করা
+                        let icon = '🔔';
+                        if(event.type === 'Goal') icon = '⚽';
+                        else if(event.type.includes('Yellow Card')) icon = '🟨';
+                        else if(event.type.includes('Red Card')) icon = '🟥';
+                        
+                        timeline.innerHTML += `<p>${icon} ${event.player} - ${event.minute}'</p>`;
+                    });
+                } else {
+                    timeline.innerHTML += "<p>এখনো কোনো গোল বা ইভেন্টের তথ্য নেই</p>";
+                }
             }
 
-        } catch (err) { console.error(err); }
+            // ৫. লাইভ স্ট্যাটাস চেক এবং বাটন কন্ট্রোল
+            const statusTag = document.getElementById('status-tag');
+            const streamLink = document.getElementById('stream-link');
+            const notLiveMsg = document.getElementById('not-live-msg');
+            const lineupLink = document.getElementById('lineup-link');
+
+            if (match.isLive) {
+                // যদি লাইভ থাকে
+                statusTag.innerText = "🔴 LIVE";
+                statusTag.style.background = "red";
+                streamLink.style.display = "inline-block"; 
+                streamLink.href = match.officialStreamUrl; 
+                notLiveMsg.style.display = "none"; 
+                if(lineupLink) lineupLink.href = `lineup.html?id=${matchId}`;
+            } else {
+                // যদি লাইভ না থাকে
+                statusTag.innerText = "UPCOMING";
+                statusTag.style.background = "#555";
+                streamLink.style.display = "none"; 
+                notLiveMsg.style.display = "block"; 
+                if(lineupLink) lineupLink.href = `lineup.html?id=${matchId}`;
+            }
+
+        } catch (error) {
+            console.error("Error fetching match:", error);
+        }
     }
 
-    // ৩. গ্রুপ পয়েন্ট টেবিল লোড
-    async function loadGroupPoints(teamName) {
-        try {
-            const res = await fetch(`/api/group-points/${teamName}`);
-            const data = await res.json();
-            document.getElementById('group-title').innerText = `${data.groupName} পয়েন্ট টেবিল`;
-            const body = document.getElementById('live-points-body');
-            body.innerHTML = data.teams.map(p => `
-                <tr>
-                    <td class="team-td"><img src="${p.teamFlag}" width="20"> ${p.teamName}</td>
-                    <td>${p.mp}</td><td>${p.w}</td><td>${p.d}</td><td>${p.l}</td>
-                    <td style="font-weight:800; color:#28a745;">${p.pts}</td>
-                </tr>`).join('');
-        } catch (err) { console.log(err); }
-    }
-
-    // ৪. আরও ম্যাচ লোড
-    async function loadMoreMatches() {
-        const res = await fetch('/api/matches');
-        const matches = await res.json();
-        document.getElementById('more-matches-list').innerHTML = matches.slice(0, 8).map(m => `
-            <div class="more-match-item" onclick="location.href='live.html?id=${m._id}'">
-                <span>${m.teamA} vs ${m.teamB}</span>
-                <small style="color:#888;">${new Date(m.matchDate).toLocaleDateString()}</small>
-            </div>`).join('');
-    }
-
-    // অটো আপডেট (প্রতি ৩০ সেকেন্ডে)
+    // প্রতি ৩০ সেকেন্ড পরপর তথ্য আপডেট করা
     setInterval(fetchMatchDetails, 30000);
+
+    // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি প্রথমবার চালানো
     fetchMatchDetails();
+
+    // এক্সট্রা চেক: লাইনআপ বাটনের জন্য আইডি সেট করা
+    if (matchId) {
+        const lineupBtn = document.getElementById('lineup-link');
+        if (lineupBtn) {
+            lineupBtn.href = `lineup.html?id=${matchId}`;
+        }
+    }
 </script>
 </body>
 </html>
