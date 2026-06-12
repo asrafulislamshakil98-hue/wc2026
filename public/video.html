@@ -27,19 +27,16 @@
     <div class="container">
         <h1 style="text-align:center; margin:30px 0;">ভিডিও গ্যালারি</h1>
 
-        <!-- মেইন প্লেয়ার -->
         <div id="main-player-area" class="video-player-container">
             <p style="color:white; text-align:center; padding:50px;">ভিডিও লোড হচ্ছে...</p>
         </div>
 
         <h2 style="color: #011f4b; border-bottom: 2px solid #ffd700; display:inline-block; padding-bottom:5px;">আরও ভিডিও</h2>
         
-        <!-- বাকি ভিডিওর গ্রিড -->
         <div id="video-list-grid" class="video-grid" style="margin-top: 20px;"></div>
     </div>
 
     <script>
-        // ইউটিউব ইউআরএল থেকে ভিডিও আইডি নেওয়ার ফাংশন
         function getYTId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
@@ -56,8 +53,6 @@
             const grid = document.getElementById('video-list-grid');
 
             if(videos.length === 0) return;
-
-            // ১. মেইন ভিডিও সেট করা
             const currentVid = vidId ? videos.find(v => v._id === vidId) : videos[0];
             const youtubeId = getYTId(currentVid.youtubeUrl);
             playerArea.innerHTML = `
@@ -66,8 +61,7 @@
                     <h2 style="margin:0; color:#011f4b;">${currentVid.title}</h2>
                 </div>
             `;
-
-            // ২. বাকি ভিডিও লিস্ট করা
+            
             videos.forEach(v => {
                 if(v._id !== currentVid._id) {
                     grid.innerHTML += `

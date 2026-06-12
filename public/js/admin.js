@@ -103,7 +103,6 @@ document.getElementById('add-match-form').addEventListener('submit', async (e) =
         lineupA: document.getElementById('lineupA').value, lineupB: document.getElementById('lineupB').value,
         teamAFlag: document.getElementById('flagImgA').src, teamBFlag: document.getElementById('flagImgB').src
     };
-    apiMatchId: document.getElementById('apiMatchId').value
     const url = matchEditMode ? `/api/edit-match/${matchEditId}` : '/api/add-match';
     await fetch(url, { method: matchEditMode ? 'PUT' : 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(matchData)});
     location.reload();
@@ -267,6 +266,8 @@ document.getElementById('add-video-form').addEventListener('submit', async (e) =
     location.reload();
 });
 
+
+// ১. ভিডিওর তালিকা লোড করা
 async function loadAdminVideos() {
     const res = await fetch('/api/videos');
     const videos = await res.json();
@@ -289,13 +290,15 @@ async function loadAdminVideos() {
     });
 }
 
+// ২. ভিডিও ডিলিট করা
 async function deleteVideo(id) {
     if (confirm("ভিডিওটি ডিলিট করতে চান?")) {
         await fetch(`/api/delete-video/${id}`, { method: 'DELETE' });
-        loadAdminVideos();
+        loadAdminVideos(); // তালিকা রিফ্রেশ
     }
 }
 
+// ৩. ভিডিও এডিট করার জন্য ফর্ম পূরণ
 function prepareVideoEdit(id, title, url, thumb) {
     videoEditMode = true;
     videoEditId = id;
@@ -304,10 +307,12 @@ function prepareVideoEdit(id, title, url, thumb) {
     document.getElementById('vidUrl').value = url;
     document.getElementById('vidThumb').value = thumb;
 
-    document.getElementById('match-save-btn').innerText = "ভিডিও আপডেট করুন"; 
+    // ফর্ম কার্ডে নিয়ে যাওয়া
+    document.getElementById('match-save-btn').innerText = "ভিডিও আপডেট করুন"; // বাটন টেক্সট চেঞ্জ
     showCard('video-form-card', document.querySelector('[onclick*="video-form-card"]'));
 }
 
+// ৪. ভিডিও সেভ বা আপডেট হ্যান্ডলার (আগের সাবমিট ফাংশনটি আপডেট করুন)
 document.getElementById('add-video-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const videoData = {
@@ -329,12 +334,14 @@ document.getElementById('add-video-form').addEventListener('submit', async (e) =
     location.reload();
 });
 
+// ট্যাব ওপেন হলে ডাটা লোড করা
 function showCard(cardId, btn) {
     document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(cardId).classList.add('active-card');
     btn.classList.add('active');
 
+    // যদি ভিডিও তালিকা ট্যাবে ক্লিক করা হয়
     if(cardId === 'video-list-card') loadAdminVideos();
 }
 loadMatches(); loadBlogs();
