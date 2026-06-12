@@ -39,31 +39,35 @@ function renderMatches(limit) {
         return;
     }
 
-    // --- লজিক শুরু: ম্যাচগুলোকে ফিল্টার এবং সর্ট করা ---
     const now = new Date();
-    
-    // ১. ভবিষ্যতের এবং বর্তমানে চলছে (Live) এমন ম্যাচগুলো আলাদা করা
-    const upcomingMatches = allMatches.filter(m => new Date(m.matchDate) >= now || m.isLive === true);
-    
-    // ২. শেষ হয়ে যাওয়া ম্যাচগুলো আলাদা করা
-    const finishedMatches = allMatches.filter(m => new Date(m.matchDate) < now && m.isLive === false);
 
-    // ৩. নতুন লিস্ট তৈরি: আগে আসবে সামনের ম্যাচ, তারপর পুরনো ম্যাচ
+    // ১. ম্যাচগুলোকে দুই ভাগে ভাগ করা
+    // 'Upcoming' যারা ভবিষ্যতে হবে অথবা এখন লাইভ চলছে
+    const upcomingMatches = allMatches.filter(m => new Date(m.matchDate) >= now || m.isLive === true)
+                                      .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate)); // সময়ের ক্রমানুসারে (কাছের ম্যাচ আগে)
+    
+    // 'Finished' যারা শেষ হয়ে গেছে
+    const finishedMatches = allMatches.filter(m => new Date(m.matchDate) < now && m.isLive === false)
+                                      .sort((a, b) => new Date(b.matchDate) - new Date(a.matchDate)); // শেষ হওয়া ম্যাচগুলোর মধ্যে লেটেস্টটা আগে
+
+    // ২. নতুন লিস্ট সাজানো: সবার আগে থাকবে আগামী দিনের ম্যাচ, তারপর থাকবে পুরনো ম্যাচ
     const sortedMatches = [...upcomingMatches, ...finishedMatches];
 
-    // ৪. শুরুতে যদি আমরা লিমিটেড ম্যাচ দেখাই (যেমন ৪টি), তবে সেগুলো শুধু 'Upcoming' থেকে নেবে
-    // কিন্তু যদি 'Upcoming' ৪টির কম থাকে, তবে বাকি জায়গা 'Finished' দিয়ে পূরণ করবে।
+    // ৩. স্লাইস করা (শুরুতে শুধু আগামী ২’টি বা লিমিট অনুযায়ী ম্যাচ দেখাবে)
     const matchesToShow = sortedMatches.slice(2, limit);
 
     matchesToShow.forEach(match => {
         const matchCard = document.createElement('div');
         matchCard.className = 'match-card';
         
-        // যদি ম্যাচ শেষ হয়ে যায়, তবে কার্ডটি একটু হালকা (Blur/Fade) দেখাবে
-        const isFinished = new Date(match.matchDate) < now && !match.isLive;
-        if (isFinished) matchCard.style.opacity = "0.7"; 
+        const matchTimeDate = new Date(match.matchDate);
+        const isFinished = matchTimeDate < now && !match.isLive;
 
+        // কার্ডে ক্লিক করলে লাইভ পেজে যাবে
         matchCard.onclick = () => window.location.href = `live.html?id=${match._id}`;
+
+        // যদি ম্যাচ শেষ হয়, তবে কার্ডটি একটু হালকা (Fade) থাকবে
+        if (isFinished) matchCard.style.opacity = "0.6";
 
         matchCard.innerHTML = `
             <div class="match-teams">
@@ -79,20 +83,20 @@ function renderMatches(limit) {
                     <span>${match.teamB}</span>
                 </div>
             </div>
-            <p class="match-time"><i class="far fa-calendar-alt"></i> ${new Date(match.matchDate).toLocaleString('bn-BD')}</p>
+            <p class="match-time"><i class="far fa-calendar-alt"></i> ${matchTimeDate.toLocaleString('bn-BD')}</p>
             <p class="match-venue"><i class="fas fa-map-marker-alt"></i> ${match.venue}</p>
             
             <div class="status-indicator">
                 ${match.isLive ? 
                     '<span class="live-btn-small">🔴 সরাসরি দেখুন</span>' : 
-                    (isFinished ? '<span class="upcoming-btn-small">ম্যাচ শেষ</span>' : '<span class="upcoming-btn-small">বিস্তারিত দেখুন</span>')
+                    (isFinished ? '<span class="upcoming-btn-small" style="background:#ddd; color:#888;">ম্যাচ শেষ</span>' : '<span class="upcoming-btn-small">বিস্তারিত দেখুন</span>')
                 }
             </div>
         `;
         container.appendChild(matchCard);
     });
 
-    // বাটন কন্ট্রোল
+    // বাটন কন্ট্রোল: সব ম্যাচ দেখানো হয়ে গেলে বাটন হাইড হয়ে যাবে
     if (moreBtn) {
         if (limit >= sortedMatches.length) {
             moreBtn.style.display = 'none';
