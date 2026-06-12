@@ -305,6 +305,24 @@ app.delete('/api/delete-video/:id', async (req, res) => {
     }
 });
 
+app.get('/api/group-points/:teamName', async (req, res) => {
+    try {
+        const teamName = req.params.teamName.trim();
+        // ১. ওই টিমটি কোন গ্রুপে আছে তা খোঁজা
+        const team = await Point.findOne({ teamName: teamName });
+        
+        if (!team) {
+            return res.status(404).json({ message: "টিমের নাম ডাটাবেসে পাওয়া যায়নি। বানান চেক করুন।" });
+        }
+
+        // ২. ওই গ্রুপের ৪টি টিমের ডাটা নিয়ে আসা
+        const groupTeams = await Point.find({ group: team.group }).sort({ pts: -1 });
+        res.json({ groupName: team.group, teams: groupTeams });
+    } catch (err) {
+        res.status(500).json({ message: "সার্ভারে সমস্যা হয়েছে।" });
+    }
+});
+
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
