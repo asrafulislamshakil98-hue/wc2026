@@ -49,7 +49,43 @@
 
         /* Stream Button */
         .official-btn { display: block; background: #28a745; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; text-align: center; margin-top: 20px; }
+.tab-content {
+    display: none; 
+    background: white;
+    margin-top: 15px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    min-height: 150px;
+}
+
+.active-content {
+    display: block !important;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* একটিভ বাটনের কালার */
+.tab-btn.active {
+    background: #f0f4f8;
+    color: var(--primary);
+    border-bottom: 3px solid var(--primary);
+}
     </style>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LYKND7R8XP');
+    </script>
+
 </head>
 <body>
 
@@ -58,7 +94,6 @@
     </nav>
 
     <div class="container">
-        <!-- Scoreboard Section -->
         <div class="scoreboard-card">
             <div id="status-tag" class="live-tag">LIVE</div>
             <div class="teams-flex">
@@ -76,26 +111,20 @@
                 <i class="fas fa-map-marker-alt"></i> <span id="match-venue">Venue Name</span>
             </div>
         </div>
-
-        <!-- Tabs Menu -->
         <div class="match-tabs">
-            <button class="tab-btn active" onclick="openTab(event, 'timeline-tab')"><i class="fas fa-history"></i>টাইমলাইন</button>
-            <button class="tab-btn" onclick="openTab(event, 'stats-tab')"><i class="fas fa-chart-bar"></i>স্ট্যাটস</button>
-            <button class="tab-btn" onclick="openTab(event, 'lineup-tab')"><i class="fas fa-users"></i>লাইনআপ</button>
-            <button class="tab-btn" onclick="openTab(event, 'more-tab')"><i class="fas fa-calendar-alt"></i>অন্যান্য</button>
+            <button class="tab-btn active" onclick="openTab(event, 'timeline-tab')"><i class="fas fa-history"></i> টাইমলাইন</button>
+            <button class="tab-btn" onclick="openTab(event, 'stats-tab')"><i class="fas fa-chart-bar"></i> স্ট্যাটাস</button>
+            <button class="tab-btn" onclick="openTab(event, 'lineup-tab')"><i class="fas fa-users"></i> লাইনআপ</button>
+            <button class="tab-btn" onclick="openTab(event, 'more-tab')"><i class="fas fa-calendar-alt"></i> অন্যান্য</button>
         </div>
 
-        <!-- Tab 1: Timeline -->
         <div id="timeline-tab" class="tab-content active-content">
             <h3 style="margin-top:0;">ম্যাচ ইভেন্ট</h3>
             <div id="timeline-list">কোনো তথ্য নেই...</div>
         </div>
-
-        <!-- Tab 2: Stats -->
         <div id="stats-tab" class="tab-content">
             <h3 style="margin-top:0;">ম্যাচ পরিসংখ্যান</h3>
             <div id="stats-list">
-                <!-- Example Stat -->
                 <div class="stat-row">
                     <div class="stat-label"><span>55%</span><span>বল পজিশন</span><span>45%</span></div>
                     <div class="stat-bar-bg"><div class="bar-left" style="width: 55%"></div><div class="bar-right" style="width: 45%"></div></div>
@@ -104,19 +133,16 @@
             </div>
         </div>
 
-        <!-- Tab 3: Lineup -->
         <div id="lineup-tab" class="tab-content">
             <h3 style="margin-top:0;">শুরুর একাদশ</h3>
             <div id="lineup-display">অ্যাডমিন থেকে স্কোয়াড চেক করুন।</div>
         </div>
 
-        <!-- Tab 4: More Matches -->
         <div id="more-tab" class="tab-content">
             <h3 style="margin-top:0;">পরবর্তী ম্যাচসমূহ</h3>
             <div id="more-matches-list">লোড হচ্ছে...</div>
         </div>
 
-        <!-- Streaming Link -->
         <div id="stream-area">
             <a href="#" id="stream-link" class="official-btn" target="_blank">
                 <i class="fas fa-play-circle"></i> সরাসরি খেলা দেখুন
@@ -129,33 +155,38 @@
     const urlParams = new URLSearchParams(window.location.search);
     const matchId = urlParams.get('id');
 
-    // ১. ট্যাব পরিবর্তন করার ফাংশন
     function openTab(evt, tabId) {
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active-content'));
-        document.querySelectorAll('.tab-btn').forEach(tb => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active-content');
-        evt.currentTarget.classList.add('active');
+        const contents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < contents.length; i++) {
+            contents[i].classList.remove("active-content");
+        }
+
+        const buttons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+
+        document.getElementById(tabId).classList.add("active-content");
+
+        evt.currentTarget.classList.add("active");
+
         if(tabId === 'more-tab') loadOtherMatches();
     }
 
-    // ২. মেইন ডাটা ফেচ করা (স্কোর ও গোল)
     async function fetchMatchDetails() {
         if (!matchId) return;
         try {
             const response = await fetch(`/api/match/${matchId}`);
             const match = await response.json();
 
-            // নাম, পতাকা, ভেন্যু
             document.getElementById('teamA-name').innerText = match.teamA;
             document.getElementById('teamB-name').innerText = match.teamB;
             document.getElementById('match-venue').innerText = match.venue;
             if(match.teamAFlag) document.getElementById('teamA-logo').src = match.teamAFlag;
             if(match.teamBFlag) document.getElementById('teamB-logo').src = match.teamBFlag;
 
-            // স্কোর আপডেট
             document.getElementById('main-score').innerText = `${match.scoreA || 0} - ${match.scoreB || 0}`;
 
-            // টাইমলাইন আপডেট
             const timelineList = document.getElementById('timeline-list');
             if (match.events && match.events.length > 0) {
                 timelineList.innerHTML = match.events.map(ev => {
@@ -166,10 +197,8 @@
                 timelineList.innerHTML = "এখনো কোনো বড় ইভেন্ট ঘটেনি।";
             }
 
-            // লাইনআপ আপডেট
             document.getElementById('lineup-display').innerHTML = `<strong>${match.teamA}:</strong> ${match.lineupA || 'N/A'}<br><br><strong>${match.teamB}:</strong> ${match.lineupB || 'N/A'}`;
 
-            // লাইভ স্ট্যাটাস বাটন কন্ট্রোল
             const statusTag = document.getElementById('status-tag');
             const streamLink = document.getElementById('stream-link');
             if (match.isLive) {
@@ -188,7 +217,6 @@
         } catch (err) { console.error("Fetch Error:", err); }
     }
 
-    // ৩. অন্যান্য ম্যাচ লোড করা (Tab 4 এর জন্য)
     async function loadOtherMatches() {
         const res = await fetch('/api/matches');
         const matches = await res.json();
@@ -201,7 +229,6 @@
         `).join('');
     }
 
-    // অটো রিফ্রেশ ও ইনিশিয়াল রান
     setInterval(fetchMatchDetails, 30000);
     fetchMatchDetails();
 
