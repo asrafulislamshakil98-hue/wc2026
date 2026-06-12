@@ -1,9 +1,16 @@
 let allMatches = []; 
 
+// ১. ডাটা লোড করার মেইন ফাংশন
 async function loadInitialData() {
     const loading = document.getElementById('loading');
+    const matchContainer = document.getElementById('match-container');
+    const blogContainer = document.getElementById('home-blog-container');
     
     try {
+        // ডাটা আসার আগে কন্টেইনার খালি করে নেওয়া (ডুপ্লিকেট ফিক্স)
+        if (matchContainer) matchContainer.innerHTML = '';
+        if (blogContainer) blogContainer.innerHTML = '';
+
         const [matchRes, blogRes, videoRes] = await Promise.all([
             fetch('/api/matches'),
             fetch('/api/blogs'),
@@ -16,8 +23,10 @@ async function loadInitialData() {
 
         if (loading) loading.style.display = 'none';
 
+        // ম্যাচেদের রেন্ডার করা (শুরুতে ২ টি - তোমার লজিক অনুযায়ী)
         renderMatches(2);
         
+        // ব্লগ এবং ভিডিও মিশিয়ে রেন্ডার করা
         renderMixedContent(blogs, videos);
 
     } catch (error) {
@@ -26,6 +35,7 @@ async function loadInitialData() {
     }
 }
 
+// ২. ম্যাচ রেন্ডার করার ফাংশন (তোমার সর্টিং লজিক ঠিক রাখা হয়েছে)
 function renderMatches(limit) {
     const container = document.getElementById('match-container');
     const moreBtn = document.getElementById('moreMatchesBtn');
@@ -41,19 +51,14 @@ function renderMatches(limit) {
 
     const now = new Date();
 
-    // ১. ম্যাচগুলোকে দুই ভাগে ভাগ করা
-    // 'Upcoming' যারা ভবিষ্যতে হবে অথবা এখন লাইভ চলছে
+    // 'Upcoming' এবং 'Finished' আলাদা করা
     const upcomingMatches = allMatches.filter(m => new Date(m.matchDate) >= now || m.isLive === true)
-                                      .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate)); // সময়ের ক্রমানুসারে (কাছের ম্যাচ আগে)
+                                      .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
     
-    // 'Finished' যারা শেষ হয়ে গেছে
     const finishedMatches = allMatches.filter(m => new Date(m.matchDate) < now && m.isLive === false)
-                                      .sort((a, b) => new Date(b.matchDate) - new Date(a.matchDate)); // শেষ হওয়া ম্যাচগুলোর মধ্যে লেটেস্টটা আগে
+                                      .sort((a, b) => new Date(b.matchDate) - new Date(a.matchDate));
 
-    // ২. নতুন লিস্ট সাজানো: সবার আগে থাকবে আগামী দিনের ম্যাচ, তারপর থাকবে পুরনো ম্যাচ
     const sortedMatches = [...upcomingMatches, ...finishedMatches];
-
-    // ৩. স্লাইস করা (শুরুতে শুধু আগামী ২’টি বা লিমিট অনুযায়ী ম্যাচ দেখাবে)
     const matchesToShow = sortedMatches.slice(0, limit);
 
     matchesToShow.forEach(match => {
@@ -63,11 +68,8 @@ function renderMatches(limit) {
         const matchTimeDate = new Date(match.matchDate);
         const isFinished = matchTimeDate < now && !match.isLive;
 
-        // কার্ডে ক্লিক করলে লাইভ পেজে যাবে
         matchCard.onclick = () => window.location.href = `live.html?id=${match._id}`;
-
-        // যদি ম্যাচ শেষ হয়, তবে কার্ডটি একটু হালকা (Fade) থাকবে
-        if (isFinished) matchCard.style.opacity = "0.6";
+        if (isFinished) matchCard.style.opacity = "0.7";
 
         matchCard.innerHTML = `
             <div class="match-teams">
@@ -85,7 +87,6 @@ function renderMatches(limit) {
             </div>
             <p class="match-time"><i class="far fa-calendar-alt"></i> ${matchTimeDate.toLocaleString('bn-BD')}</p>
             <p class="match-venue"><i class="fas fa-map-marker-alt"></i> ${match.venue}</p>
-            
             <div class="status-indicator">
                 ${match.isLive ? 
                     '<span class="live-btn-small">🔴 সরাসরি দেখুন</span>' : 
@@ -96,13 +97,8 @@ function renderMatches(limit) {
         container.appendChild(matchCard);
     });
 
-    // বাটন কন্ট্রোল: সব ম্যাচ দেখানো হয়ে গেলে বাটন হাইড হয়ে যাবে
     if (moreBtn) {
-        if (limit >= sortedMatches.length) {
-            moreBtn.style.display = 'none';
-        } else {
-            moreBtn.style.display = 'inline-block';
-        }
+        moreBtn.style.display = limit >= sortedMatches.length ? 'none' : 'inline-block';
     }
 }
 
@@ -110,17 +106,20 @@ function showAllMatches() {
     renderMatches(allMatches.length);
 }
 
+// ৩. মিক্সড কন্টেন্ট রেন্ডার (ব্লগ + ভিডিও) - ডুপ্লিকেট রোধ করা হয়েছে
 function renderMixedContent(blogs, videos) {
     const container = document.getElementById('home-blog-container');
     if (!container) return;
 
-    container.innerHTML = '';
-    
+    container.innerHTML = ''; // কন্টেইনার পরিষ্কার করা
+
+    // শুধু বৈধ ডাটা নেওয়া (যাদের টাইটেল আছে)
     const combinedContent = [
-        ...blogs.map(b => ({ ...b, contentType: 'blog' })),
-        ...videos.map(v => ({ ...v, contentType: 'video' }))
+        ...blogs.filter(b => b.title).map(b => ({ ...b, contentType: 'blog' })),
+        ...videos.filter(v => v.title).map(v => ({ ...v, contentType: 'video' }))
     ];
 
+    // তারিখ অনুযায়ী সাজানো
     combinedContent.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     if (combinedContent.length === 0) {
@@ -142,6 +141,7 @@ function renderMixedContent(blogs, videos) {
                 </div>`;
             container.innerHTML += blogCard;
         } else {
+            // ইউটিউব আইডি বের করা
             const ytId = item.youtubeUrl.split('v=')[1]?.split('&')[0] || item.youtubeUrl.split('/').pop();
             const thumb = item.thumbnail || `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
 
@@ -163,6 +163,7 @@ function renderMixedContent(blogs, videos) {
     });
 }
 
+// ৪. সার্চ বক্স লজিক (তোমার কোড ঠিক রাখা হয়েছে)
 const searchInput = document.getElementById('searchInput');
 if (searchInput) {
     searchInput.addEventListener('keyup', (e) => {
