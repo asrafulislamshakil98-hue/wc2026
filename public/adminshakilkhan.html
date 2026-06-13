@@ -55,6 +55,7 @@
         <button class="menu-btn" onclick="showCard('video-form-card', this)"><i class="fas fa-video"></i> ভিডিও যোগ</button>
         <button class="menu-btn" onclick="showCard('match-list-card', this)"><i class="fas fa-list"></i> ম্যাচের তালিকা</button>
         <button class="menu-btn" onclick="showCard('points-card', this)"><i class="fas fa-table"></i> পয়েন্ট আপডেট</button>
+        <button class="menu-btn" onclick="showCard('score-card', this)"><i class="fas fa-marker"></i> স্কোর আপডেট</button>
         <button class="menu-btn" onclick="showCard('blog-list-card', this)"><i class="fas fa-newspaper"></i> ব্লগের তালিকা</button>
         <button class="menu-btn" onclick="showCard('video-list-card', this)"><i class="fas fa-play-circle"></i> ভিডিওর তালিকা</button>
     </div>
@@ -93,6 +94,10 @@
             <div class="form-group">
                 <label>স্ট্রিমিং লিঙ্ক (YouTube/FIFA+)</label>
                 <input type="url" id="streamUrl" placeholder="https://...">
+            </div>
+            <div class="form-group">
+               <label>API Match ID (অটো স্কোরের জন্য)</label>
+               <input type="text" id="apiMatchId" placeholder="যেমন: 123456">
             </div>
             <button type="submit" class="btn-save" id="match-save-btn">ম্যাচ সেভ করুন</button>
         </form>
@@ -136,7 +141,16 @@
     <h2><i class="fas fa-list-ul"></i> সব ভিডিওর তালিকা</h2>
     <div id="admin-video-container">লোড হচ্ছে...</div>
 </div>
-
+<!-- দ্রুত স্কোর আপডেট কার্ড -->
+<div id="score-card" class="admin-card">
+    <h2><i class="fas fa-clock"></i> লাইভ স্কোর এডিটর</h2>
+    <p style="color: #666; margin-bottom: 20px;">এখানে শুধু চলমান ম্যাচের স্কোর এবং গোলদাতার নাম আপডেট করুন।</p>
+    
+    <div id="admin-score-list">
+        <!-- জাভাস্ক্রিপ্ট দিয়ে এখানে লাইভ ম্যাচগুলো আসবে -->
+        লোড হচ্ছে...
+    </div>
+</div>
 
 <!-- ভিডিও প্রিভিউ মডাল -->
 <div id="videoModal">
@@ -174,10 +188,7 @@
         </button>
         <p id="sync-status" style="margin-top: 15px; font-weight: bold;"></p>
     </div>
-    <div class="form-group">
-        <label>API Match ID (অটো স্কোরের জন্য)</label>
-        <input type="text" id="apiMatchId" placeholder="যেমন: 123456">
-    </div>
+    
 </div>
 
 <script src="js/admin.js"></script>

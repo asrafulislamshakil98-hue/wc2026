@@ -216,27 +216,43 @@ app.delete('/api/delete-video/:id', async (req, res) => {
     res.json({ message: "Deleted" });
 });
 
-// --- ৬. অটো লাইভ স্কোর সিঙ্ক লজিক ---
 async function updateLiveScoresFromAPI() {
     try {
         const liveMatches = await Match.find({ isLive: true });
         for (let match of liveMatches) {
             if (match.apiMatchId) {
-                const options = {
-                    method: 'GET',
-                    url: 'https://api-football-v1.p.rapidapi.com/v3/fixtures',
-                    params: { id: match.apiMatchId },
-                    headers: {
-                        'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 
-                        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
-                    }
-                };
-                const response = await axios.request(options);
+                // ১. স্কোর এবং ইভেন্ট আনার জন্য রিকোয়েস্ট
+                const response = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${match.apiMatchId}`, {
+                    headers: { 'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com' }
+                });
+
+                // ২. স্ট্যাটিস্টিকস (Shots, Possession) আনার জন্য আলাদা রিকোয়েস্ট
+                const statsRes = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics?fixture=${match.apiMatchId}`, {
+                    headers: { 'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com' }
+                });
+
                 const apiData = response.data.response[0];
+                const statsData = statsRes.data.response;
+
                 if (apiData) {
+                    let updatedStats = { possessionA: 50, possessionB: 50, shotsA: 0, shotsB: 0 };
+
+                    // স্ট্যাটাস ডাটা প্রসেস করা
+                    if (statsData && statsData.length > 0) {
+                        const sA = statsData[0].statistics;
+                        const sB = statsData[1].statistics;
+                        updatedStats = {
+                            possessionA: parseInt(sA.find(s => s.type === "Ball Possession")?.value) || 50,
+                            possessionB: parseInt(sB.find(s => s.type === "Ball Possession")?.value) || 50,
+                            shotsA: sA.find(s => s.type === "Total Shots")?.value || 0,
+                            shotsB: sB.find(s => s.type === "Total Shots")?.value || 0
+                        };
+                    }
+
                     await Match.findByIdAndUpdate(match._id, {
                         scoreA: apiData.goals.home,
                         scoreB: apiData.goals.away,
+                        stats: updatedStats, // স্ট্যাটাস আপডেট
                         events: apiData.events.map(ev => ({
                             minute: ev.time.elapsed,
                             type: ev.type,
@@ -246,13 +262,10 @@ async function updateLiveScoresFromAPI() {
                 }
             }
         }
-    } catch (error) {
-        console.error("API Sync Error:", error.message);
-    }
+    } catch (error) { console.error("API Error:", error.message); }
 }
-setInterval(updateLiveScoresFromAPI, 120000); // ২ মিনিট পর পর
+setInterval(updateLiveScoresFromAPI, 120000); 
 
-// ৭. সার্ভার স্টার্ট
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -328,4 +328,88 @@ function showCard(cardId, btn) {
     // যদি ভিডিও তালিকা ট্যাবে ক্লিক করা হয়
     if(cardId === 'video-list-card') loadAdminVideos();
 }
+
+// ১. স্কোর এডিটর লিস্ট লোড করা
+async function loadScoreEditor() {
+    const res = await fetch('/api/matches');
+    const matches = await res.json();
+    const container = document.getElementById('admin-score-list');
+    container.innerHTML = '';
+
+    // শুধু সেই ম্যাচগুলো দেখাবে যেগুলো 'Live' অথবা আজকের
+    matches.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.style = "background:#fdfdfd; padding:20px; border:1px solid #ddd; margin-bottom:15px; border-radius:10px;";
+        
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <div style="flex:1; min-width:200px;">
+                    <strong>${m.teamA} vs ${m.teamB}</strong><br>
+                    <small>${new Date(m.matchDate).toLocaleString('bn-BD')}</small>
+                </div>
+                
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <input type="number" id="scoreA-${m._id}" value="${m.scoreA}" style="width:50px; text-align:center; font-weight:bold;">
+                    <span>-</span>
+                    <input type="number" id="scoreB-${m._id}" value="${m.scoreB}" style="width:50px; text-align:center; font-weight:bold;">
+                </div>
+
+                <div style="flex:2; min-width:250px;">
+                    <input type="text" id="event-${m._id}" placeholder="গোলদাতার নাম ও মিনিট (যেমন: Messi 45', Neymar 60')">
+                </div>
+
+                <button onclick="saveQuickScore('${m._id}')" style="background:#28a745; color:white; padding:10px 20px; border-radius:5px; cursor:pointer;">আপডেট</button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ২. দ্রুত স্কোর এবং ইভেন্ট সেভ করা
+async function saveQuickScore(id) {
+    const scoreA = document.getElementById(`scoreA-${id}`).value;
+    const scoreB = document.getElementById(`scoreB-${id}`).value;
+    const eventText = document.getElementById(`event-${id}`).value;
+
+    // ইভেন্ট টেক্সটকে অবজেক্ট অ্যারেতে রূপান্তর (সহজ করার জন্য)
+    let eventArray = [];
+    if(eventText) {
+        eventArray = eventText.split(',').map(item => ({
+            player: item.trim(),
+            minute: "", // আপনি চাইলে টেক্সটের সাথেই মিনিট রাখতে পারেন
+            type: "Goal"
+        }));
+    }
+
+    const updatedData = {
+        scoreA: parseInt(scoreA),
+        scoreB: parseInt(scoreB),
+        events: eventArray
+    };
+
+    const res = await fetch(`/api/edit-match/${id}`, { // আমরা আগের এডিট এপিআই-টি ব্যবহার করছি
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData)
+    });
+
+    if (res.ok) {
+        alert("স্কোর আপডেট হয়েছে! এখন পয়েন্ট টেবিলটিও রিফ্রেশ করে নিন।");
+        syncPoints(); // স্কোর পরিবর্তনের পর পয়েন্ট টেবিল অটো রিফ্রেশ হবে
+    }
+}
+
+// ট্যাব সুইচিং ফাংশন আপডেট করুন
+function showCard(cardId, btn) {
+    document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(cardId).classList.add('active-card');
+    btn.classList.add('active');
+
+    if(cardId === 'score-card') loadScoreEditor();
+    if(cardId === 'points-card') loadPointsEditor();
+    if(cardId === 'match-list-card') loadMatches();
+    if(cardId === 'blog-list-card') loadBlogs();
+}
 loadMatches(); loadBlogs();
