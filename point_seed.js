@@ -13,7 +13,7 @@ const Point = mongoose.model('Point', new mongoose.Schema({
 }));
 
 const teams = [
-    { n: "Mexico", f: "mx" }, { n: "South Africa", f: "za" }, { n: "South Korea", f: "kr" }, { n: "Czech Republic", f: "cz" },
+    { n: "Mexico", f: "mx" }, { n: "South Africa", f: "za" }, { n: "Korea Republic", f: "kr" }, { n: "Czechia", f: "cz" },
     { n: "Canada", f: "ca" }, { n: "Qatar", f: "qa" }, { n: "Switzerland", f: "ch" }, { n: "Brazil", f: "br" },
     { n: "Morocco", f: "ma" }, { n: "Haiti", f: "ht" }, { n: "Scotland", f: "gb-sct" }, { n: "USA", f: "us" },
     { n: "Paraguay", f: "py" }, { n: "Australia", f: "au" }, { n: "Türkiye", f: "tr" }, { n: "Germany", f: "de" },
