@@ -142,9 +142,51 @@ app.post('/api/blogs/comment/:id', async (req, res) => {
 });
 
 // পয়েন্ট টেবিল এপিআই
-app.get('/api/all-points', async (req, res) => {
-    const points = await Point.find().sort({ pts: -1, teamName: 1 });
-    res.json(points);
+app.get('/api/points-table', async (req, res) => {
+    try {
+        const matches = await Match.find({ isLive: false }); // শুধু শেষ হওয়া ম্যাচ
+        const now = new Date();
+        let teamStats = {};
+
+        matches.forEach(m => {
+            // যদি ম্যাচের সময় পার হয়ে যায় তবেই পয়েন্ট হিসাব করবে
+            if (new Date(m.matchDate) <= now) {
+                const teams = [m.teamA, m.teamB];
+                
+                // টিম অবজেক্ট তৈরি (যদি আগে না থাকে)
+                teams.forEach(t => {
+                    if (!teamStats[t]) {
+                        teamStats[t] = { mp: 0, w: 0, d: 0, l: 0, pts: 0 };
+                    }
+                });
+
+                // ম্যাচ খেলেছে (MP) যোগ করা
+                teamStats[m.teamA].mp += 1;
+                teamStats[m.teamB].mp += 1;
+
+                if (m.scoreA > m.scoreB) {
+                    // টিম A জিতেছে
+                    teamStats[m.teamA].w += 1;
+                    teamStats[m.teamA].pts += 3;
+                    teamStats[m.teamB].l += 1;
+                } else if (m.scoreB > m.scoreA) {
+                    // টিম B জিতেছে
+                    teamStats[m.teamB].w += 1;
+                    teamStats[m.teamB].pts += 3;
+                    teamStats[m.teamA].l += 1;
+                } else {
+                    // ড্র হয়েছে (০-০ বা ১-১ যাই হোক)
+                    teamStats[m.teamA].d += 1;
+                    teamStats[m.teamA].pts += 1;
+                    teamStats[m.teamB].d += 1;
+                    teamStats[m.teamB].pts += 1;
+                }
+            }
+        });
+        res.json(teamStats);
+    } catch (err) {
+        res.status(500).json({ message: "Error calculating points" });
+    }
 });
 
 app.put('/api/update-single-point/:id', async (req, res) => {
