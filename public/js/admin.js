@@ -251,82 +251,127 @@ async function saveManualPoint(id) {
     alert("আপডেট হয়েছে!");
 }
 
-// ১. ভিডিওর তালিকা লোড করা
+// ২. ভিডিওর তালিকা লোড করার ফাংশন
 async function loadAdminVideos() {
-    const res = await fetch('/api/videos');
-    const videos = await res.json();
     const container = document.getElementById('admin-video-container');
-    container.innerHTML = '';
+    if (!container) return;
 
-    videos.forEach(v => {
-        const div = document.createElement('div');
-        div.className = 'list-item';
-        div.innerHTML = `
-            <div class="list-info">
-                <strong>${v.title}</strong><br>
-                <small>${v.youtubeUrl}</small>
-            </div>
-            <div>
-                <button class="action-btn" style="background:orange" onclick="prepareVideoEdit('${v._id}', '${v.title}', '${v.youtubeUrl}', '${v.thumbnail}')">এডিট</button>
-                <button class="action-btn" style="background:red" onclick="deleteVideo('${v._id}')">ডিলিট</button>
-            </div>`;
-        container.appendChild(div);
-    });
-}
+    container.innerHTML = '<p style="text-align:center;">লোড হচ্ছে...</p>'; 
 
-// ২. ভিডিও ডিলিট করা
-async function deleteVideo(id) {
-    if (confirm("ভিডিওটি ডিলিট করতে চান?")) {
-        await fetch(`/api/delete-video/${id}`, { method: 'DELETE' });
-        loadAdminVideos(); // তালিকা রিফ্রেশ
+    try {
+        // আপনার সার্ভারের এপিআই রুটটি চেক করুন, এটি কি /api/videos?
+        const res = await fetch('/api/videos');
+        const videos = await res.json();
+        
+        container.innerHTML = ''; 
+
+        if (!videos || videos.length === 0) {
+            container.innerHTML = '<p style="text-align:center;">কোনো ভিডিও পাওয়া যায়নি।</p>';
+            return;
+        }
+
+        videos.forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.style = "background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid #eee;";
+            
+            div.innerHTML = `
+                <div class="list-info">
+                    <strong>${v.title}</strong><br>
+                    <small style="color:blue;">${v.youtubeUrl}</small>
+                </div>
+                <div class="btn-flex" style="display:flex; gap:10px;">
+                    <button class="action-btn" style="background:orange; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;" onclick="prepareVideoEdit('${v._id}', '${v.title}', '${v.youtubeUrl}', '${v.thumbnail}')">এডিট</button>
+                    <button class="action-btn" style="background:red; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;" onclick="deleteVideo('${v._id}')">ডিলিট</button>
+                </div>`;
+            container.appendChild(div);
+        });
+    } catch (err) {
+        console.error("Video Load Error:", err);
+        container.innerHTML = '<p style="color:red; text-align:center;">সার্ভার থেকে ভিডিও লোড করা সম্ভব হয়নি।</p>';
     }
 }
 
-// ৩. ভিডিও এডিট করার জন্য ফর্ম পূরণ
+// ৩. ভিডিও ডিলিট করা
+async function deleteVideo(id) {
+    if (confirm("আপনি কি নিশ্চিত যে এই ভিডিওটি ডিলিট করতে চান?")) {
+        try {
+            const res = await fetch(`/api/delete-video/${id}`, { method: 'DELETE' });
+            if(res.ok) {
+                alert("ভিডিওটি সফলভাবে ডিলিট হয়েছে।");
+                loadAdminVideos(); // তালিকাটি তৎক্ষণাৎ আপডেট করবে
+            }
+        } catch (err) {
+            alert("ডিলিট করতে সমস্যা হয়েছে!");
+        }
+    }
+}
+
+// ৪. ভিডিও এডিট করার জন্য ফর্ম পূরণ
 function prepareVideoEdit(id, title, url, thumb) {
     videoEditMode = true;
     videoEditId = id;
 
+    // ফর্মের বক্সে তথ্য বসানো
     document.getElementById('vidTitle').value = title;
     document.getElementById('vidUrl').value = url;
-    document.getElementById('vidThumb').value = thumb;
+    document.getElementById('vidThumb').value = thumb || "";
 
-    // ফর্ম কার্ডে নিয়ে যাওয়া
-    document.getElementById('match-save-btn').innerText = "ভিডিও আপডেট করুন"; // বাটন টেক্সট চেঞ্জ
+    // ভিডিও সেভ বাটনের টেক্সট পরিবর্তন (নিশ্চিত করুন আপনার বাটনের ID 'blog-save-btn' বা 'video-save-btn')
+    const saveBtn = document.getElementById('blog-save-btn'); // আপনার HTML এ যে বাটন আছে সেটি দিন
+    if(saveBtn) saveBtn.innerText = "ভিডিও আপডেট করুন";
+
+    // অটোমেটিক ভিডিও যোগ করার কার্ডে নিয়ে যাবে
     showCard('video-form-card', document.querySelector('[onclick*="video-form-card"]'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ৪. ভিডিও সেভ বা আপডেট হ্যান্ডলার (আগের সাবমিট ফাংশনটি আপডেট করুন)
-document.getElementById('add-video-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const videoData = {
-        title: document.getElementById('vidTitle').value,
-        youtubeUrl: document.getElementById('vidUrl').value,
-        thumbnail: document.getElementById('vidThumb').value
-    };
+// ৫. ভিডিও সেভ বা আপডেট হ্যান্ডলার
+const videoForm = document.getElementById('add-video-form');
+if(videoForm) {
+    videoForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const videoData = {
+            title: document.getElementById('vidTitle').value,
+            youtubeUrl: document.getElementById('vidUrl').value,
+            thumbnail: document.getElementById('vidThumb').value
+        };
 
-    const url = videoEditMode ? `/api/edit-video/${videoEditId}` : '/api/add-video';
-    const method = videoEditMode ? 'PUT' : 'POST';
+        const url = videoEditMode ? `/api/edit-video/${videoEditId}` : '/api/add-video';
+        const method = videoEditMode ? 'PUT' : 'POST';
 
-    await fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(videoData)
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(videoData)
+            });
+
+            if(res.ok) {
+                alert(videoEditMode ? "ভিডিও আপডেট হয়েছে!" : "নতুন ভিডিও যোগ হয়েছে!");
+                location.reload(); // পেজ রিফ্রেশ
+            }
+        } catch (err) {
+            alert("সেভ করতে সমস্যা হয়েছে।");
+        }
     });
+}
 
-    alert(videoEditMode ? "ভিডিও আপডেট হয়েছে!" : "ভিডিও যোগ হয়েছে!");
-    location.reload();
-});
-
-// ট্যাব ওপেন হলে ডাটা লোড করা
+// ৬. ট্যাব সুইচিং ফাংশন (আপনার কোডটি এখানেও ফিক্স করা হয়েছে)
 function showCard(cardId, btn) {
     document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(cardId).classList.add('active-card');
-    btn.classList.add('active');
+    
+    const targetCard = document.getElementById(cardId);
+    if(targetCard) {
+        targetCard.classList.add('active-card');
+        if(btn) btn.classList.add('active');
+    }
 
     // যদি ভিডিও তালিকা ট্যাবে ক্লিক করা হয়
-    if(cardId === 'video-list-card') loadAdminVideos();
+    if(cardId === 'video-list-card') {
+        loadAdminVideos();
+    }
 }
 
 // ১. স্কোর এডিটর লিস্ট লোড করা
