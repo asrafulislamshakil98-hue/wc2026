@@ -313,14 +313,15 @@
     font-size: 14px;
 }
 
+/* Hero Section এর লেখার নতুন রঙ */
 .hero h2 {
-    color: #011f4b; 
+    color: #011f4b; /* গাঢ় নীল */
     font-size: 48px;
     font-weight: 700;
 }
 
 .hero p {
-    color: #333; 
+    color: #333; /* স্পষ্ট কালো বা ধূসর */
     font-size: 20px;
 }
 
@@ -484,19 +485,19 @@
 
  .story-slider {
         display: flex;
-        overflow-x: auto; 
+        overflow-x: auto; /* বাম-ডানে স্ক্রল করার জন্য */
         gap: 15px;
         padding: 20px 0;
         scroll-snap-type: x mandatory;
-        scrollbar-width: none;
+        scrollbar-width: none; /* Firefox এর জন্য স্ক্রলবার হাইড */
     }
     .story-slider::-webkit-scrollbar {
-        display: none; 
+        display: none; /* Chrome/Safari এর জন্য স্ক্রলবার হাইড */
     }
 
     .story-card {
-        flex: 0 0 140px; 
-        height: 200px; 
+        flex: 0 0 140px; /* কার্ডের উইডথ */
+        height: 200px; /* স্টোরি সাইজ হাইট */
         background: linear-gradient(145deg, #ffffff, #f0f0f0);
         border-radius: 15px;
         display: flex;
@@ -532,32 +533,46 @@
     @keyframes pulse {
         0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
     }
-
+    
+    /* পুরো সেকশনের প্যাডিং এবং মার্জিন জিরো করা */
 .match-story-section {
-    padding: 0; 
-    margin-top: -10px; 
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #f4f7f6; /* আপনার বডির রঙের সাথে মিলিয়ে দিন */
 }
 
+/* স্লাইডারের ভেতরের গ্যাপ কমানো */
 .story-slider {
     display: flex;
     overflow-x: auto;
-    gap: 12px;
-    padding: 10px 0;
+    gap: 8px; /* কার্ডগুলোর মাঝখানের দূরত্ব */
+    padding: 5px 0 !important; /* উপরে নিচে মাত্র ৫ পিক্সেল জায়গা */
+    cursor: grab;
     scrollbar-width: none;
+    margin-top: 5px; /* নেভিগেশন বারের থেকে সামান্য দূরত্ব */
 }
 
-.section-title {
-    margin: 15px 0 10px 0; 
-    font-size: 20px;
+/* কার্ডের সাইজ কিছুটা ছোট করা যাতে কম জায়গা লাগে */
+.story-card {
+    flex: 0 0 120px !important; /* চওড়া কমিয়ে ১২০ করা হলো */
+    height: 160px !important; /* উচ্চতা কমিয়ে ১৬০ করা হলো */
+    padding: 10px 5px !important; /* ভেতরের প্যাডিং কমানো হলো */
 }
 
+/* সার্চ বক্সের ওপরের জায়গা কমানো */
 #schedule {
-    padding-top: 0;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 #searchInput {
-    margin-bottom: 5px; 
-    padding: 8px 15px;
+    margin-top: 5px !important; /* স্লাইডারের ঠিক নিচেই সার্চ বক্স থাকবে */
+    margin-bottom: 10px !important;
+}
+
+/* যদি "খেলার পূর্ণাঙ্গ সময়সূচী" শিরোনাম থাকে, সেটি হাইড করে দিন */
+.section-title {
+    display: none !important;
 }
     </style>
 
@@ -619,6 +634,7 @@
 
     <section id="schedule" class="container" style="padding-bottom: 50px;">
         <div class="section-header">
+            <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
     </section>
