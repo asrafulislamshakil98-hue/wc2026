@@ -118,6 +118,55 @@
             color: var(--gold);
         }
 
+        /* Hero Section */
+        .hero {
+            background: url('images/ChatGPT Image May 29, 2026, 10_03_07 AM.png') no-repeat center center/cover;
+            height: 300px;
+            position: relative;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            background: rgba(235, 238, 243, 0.233);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .badge {
+            background: var(--gold);
+            color: var(--primary-blue);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .hero h2 {
+            font-size: 40px;
+            margin: 15px 0;
+        }
+
+        .hero-btns a {
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .btn-primary { background: var(--gold); color: var(--primary-blue); }
+        .btn-secondary { border: 2px solid var(--white); color: var(--white); }
+
         /* Stats Bar */
         .stats-bar {
             background: var(--white);
@@ -262,6 +311,28 @@
     color: #333;
     border-radius: 20px;
     font-size: 14px;
+}
+
+/* Hero Section এর লেখার নতুন রঙ */
+.hero h2 {
+    color: #011f4b; /* গাঢ় নীল */
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.hero p {
+    color: #333; /* স্পষ্ট কালো বা ধূসর */
+    font-size: 20px;
+}
+
+.badge {
+    background: #011f4b; 
+    color: #ffd700; 
+}
+
+.btn-secondary {
+    border: 2px solid #011f4b;
+    color: #011f4b;
 }
 
 .match-teams {
@@ -462,7 +533,6 @@
     @keyframes pulse {
         0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
     }
-    
     /* ১. সার্চ বক্সের নিচের জায়গা কমানোর জন্য */
 #schedule {
     padding-top: 0 !important;
@@ -495,6 +565,7 @@
     margin-bottom: 15px !important;
     font-size: 22px; /* টাইটেলটা একটু ছোট করলে গ্যাপ আরও কম মনে হবে */
 }
+    
     </style>
 
 <link rel="icon" type="image/png" href="images/logo.png.png">
@@ -555,6 +626,7 @@
 
     <section id="schedule" class="container" style="padding-bottom: 50px;">
         <div class="section-header">
+            <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
     </section>
