@@ -534,46 +534,7 @@
         0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
     }
     
-    /* পুরো সেকশনের প্যাডিং এবং মার্জিন জিরো করা */
-.match-story-section {
-    padding: 0 !important;
-    margin: 0 !important;
-    background: #f4f7f6; /* আপনার বডির রঙের সাথে মিলিয়ে দিন */
-}
-
-/* স্লাইডারের ভেতরের গ্যাপ কমানো */
-.story-slider {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px; /* কার্ডগুলোর মাঝখানের দূরত্ব */
-    padding: 5px 0 !important; /* উপরে নিচে মাত্র ৫ পিক্সেল জায়গা */
-    cursor: grab;
-    scrollbar-width: none;
-    margin-top: 5px; /* নেভিগেশন বারের থেকে সামান্য দূরত্ব */
-}
-
-/* কার্ডের সাইজ কিছুটা ছোট করা যাতে কম জায়গা লাগে */
-.story-card {
-    flex: 0 0 120px !important; /* চওড়া কমিয়ে ১২০ করা হলো */
-    height: 160px !important; /* উচ্চতা কমিয়ে ১৬০ করা হলো */
-    padding: 10px 5px !important; /* ভেতরের প্যাডিং কমানো হলো */
-}
-
-/* সার্চ বক্সের ওপরের জায়গা কমানো */
-#schedule {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-
-#searchInput {
-    margin-top: 5px !important; /* স্লাইডারের ঠিক নিচেই সার্চ বক্স থাকবে */
-    margin-bottom: 10px !important;
-}
-
-/* যদি "খেলার পূর্ণাঙ্গ সময়সূচী" শিরোনাম থাকে, সেটি হাইড করে দিন */
-.section-title {
-    display: none !important;
-}
+    
     </style>
 
 <link rel="icon" type="image/png" href="images/logo.png.png">
@@ -634,7 +595,6 @@
 
     <section id="schedule" class="container" style="padding-bottom: 50px;">
         <div class="section-header">
-            <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
     </section>
