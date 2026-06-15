@@ -1,13 +1,11 @@
 let allMatches = []; 
 
-// ১. ডাটা লোড করার মেইন ফাংশন
 async function loadInitialData() {
     const loading = document.getElementById('loading');
     const matchContainer = document.getElementById('match-container');
     const blogContainer = document.getElementById('home-blog-container');
     
     try {
-        // ডাটা আসার আগে কন্টেইনার খালি করে নেওয়া (ডুপ্লিকেট ফিক্স)
         if (matchContainer) matchContainer.innerHTML = '';
         if (blogContainer) blogContainer.innerHTML = '';
 
@@ -23,10 +21,8 @@ async function loadInitialData() {
 
         if (loading) loading.style.display = 'none';
 
-        // ম্যাচেদের রেন্ডার করা (শুরুতে ২ টি - তোমার লজিক অনুযায়ী)
         renderMatches(2);
         
-        // ব্লগ এবং ভিডিও মিশিয়ে রেন্ডার করা
         renderMixedContent(blogs, videos);
 
     } catch (error) {
@@ -35,7 +31,6 @@ async function loadInitialData() {
     }
 }
 
-// ২. ম্যাচ রেন্ডার করার ফাংশন (তোমার সর্টিং লজিক ঠিক রাখা হয়েছে)
 function renderMatches(limit) {
     const container = document.getElementById('match-container');
     const moreBtn = document.getElementById('moreMatchesBtn');
@@ -51,7 +46,6 @@ function renderMatches(limit) {
 
     const now = new Date();
 
-    // 'Upcoming' এবং 'Finished' আলাদা করা
     const upcomingMatches = allMatches.filter(m => new Date(m.matchDate) >= now || m.isLive === true)
                                       .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
     
@@ -106,20 +100,17 @@ function showAllMatches() {
     renderMatches(allMatches.length);
 }
 
-// ৩. মিক্সড কন্টেন্ট রেন্ডার (ব্লগ + ভিডিও) - ডুপ্লিকেট রোধ করা হয়েছে
 function renderMixedContent(blogs, videos) {
     const container = document.getElementById('home-blog-container');
     if (!container) return;
 
-    container.innerHTML = ''; // কন্টেইনার পরিষ্কার করা
+    container.innerHTML = '';
 
-    // শুধু বৈধ ডাটা নেওয়া (যাদের টাইটেল আছে)
     const combinedContent = [
         ...blogs.filter(b => b.title).map(b => ({ ...b, contentType: 'blog' })),
         ...videos.filter(v => v.title).map(v => ({ ...v, contentType: 'video' }))
     ];
 
-    // তারিখ অনুযায়ী সাজানো
     combinedContent.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     if (combinedContent.length === 0) {
@@ -141,7 +132,6 @@ function renderMixedContent(blogs, videos) {
                 </div>`;
             container.innerHTML += blogCard;
         } else {
-            // ইউটিউব আইডি বের করা
             const ytId = item.youtubeUrl.split('v=')[1]?.split('&')[0] || item.youtubeUrl.split('/').pop();
             const thumb = item.thumbnail || `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
 
@@ -163,7 +153,6 @@ function renderMixedContent(blogs, videos) {
     });
 }
 
-// ৪. সার্চ বক্স লজিক (তোমার কোড ঠিক রাখা হয়েছে)
 const searchInput = document.getElementById('searchInput');
 if (searchInput) {
     searchInput.addEventListener('keyup', (e) => {
@@ -182,7 +171,6 @@ if (searchInput) {
     });
 }
 
-// ১. কন্টেন্ট লোড করার মেইন ফাংশন
 async function initializeHome() {
     try {
         const [matchRes, blogRes, videoRes] = await Promise.all([
@@ -195,10 +183,8 @@ async function initializeHome() {
         const blogs = await blogRes.json();
         const videos = await videoRes.json();
 
-        // ২. ম্যাচগুলোকে আপনার লজিক অনুযায়ী সাজানো
         renderStorySlider(allMatches);
 
-        // ৩. ব্লগ ও ভিডিও রেন্ডার করা (আপনার আগের লজিক)
         renderMixedContent(blogs, videos);
 
     } catch (error) {
@@ -213,12 +199,10 @@ function renderStorySlider(matches) {
 
     const now = new Date();
 
-    // লজিক: শেষ হওয়া ম্যাচ (বামে), লাইভ (মাঝখানে), আগামী ম্যাচ (ডানে)
     const finished = matches.filter(m => new Date(m.matchDate) < now && !m.isLive).sort((a,b) => new Date(b.matchDate) - new Date(a.matchDate));
     const live = matches.filter(m => m.isLive);
     const upcoming = matches.filter(m => new Date(m.matchDate) >= now && !m.isLive).sort((a,b) => new Date(a.matchDate) - new Date(b.matchDate));
 
-    // সবগুলোকে একসাথে জোড়া লাগানো [Finished (Sorted) -> Live -> Upcoming]
     const sortedMatches = [...finished.reverse(), ...live, ...upcoming];
 
     sortedMatches.forEach(match => {
@@ -226,7 +210,6 @@ function renderStorySlider(matches) {
         const card = document.createElement('div');
         card.className = `story-card ${match.isLive ? 'live-match' : ''}`;
         
-        // কার্ডে ক্লিক করলে লাইভ পেজে যাবে
         card.onclick = () => location.href = `live.html?id=${match._id}`;
 
         card.innerHTML = `
@@ -253,7 +236,6 @@ function renderStorySlider(matches) {
         slider.appendChild(card);
     });
 
-    // ৫. অটো-স্ক্রল: লাইভ ম্যাচ বা প্রথম আসন্ন ম্যাচে স্ক্রল করে নিয়ে যাবে
     setTimeout(() => {
         const activeMatch = document.querySelector('.live-match') || document.querySelector('.status-upcoming')?.parentElement;
         if (activeMatch) {
@@ -286,11 +268,10 @@ if (slider) {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 2; // স্লাইডের গতি
+        const walk = (x - startX) * 2; 
         slider.scrollLeft = scrollLeft - walk;
     });
 }
-// পেজ লোড হলে ফাংশনটি রান করুন
 document.addEventListener('DOMContentLoaded', initializeHome);
 
 document.addEventListener('DOMContentLoaded', loadInitialData);

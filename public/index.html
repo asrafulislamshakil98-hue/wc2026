@@ -10,16 +10,18 @@
     <title>২০২৬ ফুটবল বিশ্বকাপ সময়সূচী ও লাইভ স্কোর | World Cup 2026 Schedule & Live</title>
     <meta name="title" content="২০২৬ ফুটবল বিশ্বকাপ সময়সূচী ও লাইভ স্কোর | World Cup 2026 Schedule & Live">
     <meta name="description" content="২০২৬ ফুটবল বিশ্বকাপের পূর্ণাঙ্গ সময়সূচী বাংলাদেশ সময় অনুযায়ী। সব ম্যাচের লাইভ স্কোর, টিম স্কোয়াড এবং সরাসরি সম্প্রচারের আপডেট দেখুন এখানে।">
-    <meta name="keywords" content="২০২৬ ফুটবল বিশ্বকাপ, বিশ্বকাপ সময়সূচী ২০২৬, World Cup 2026 Schedule, world cup live, live today , football live today, Live Score, Football Live, WC 2026 Fixtures Bangladesh Time, ২০২৬ বিশ্বকাপ লাইভ , FIFA World Cup 2026 schedule, World Cup 2026 live score, WC 2026 points table, world cup 2026 fixtures, Argentina vs Brazil live 2026, messi, neymar, cr7, World Cup 2026 Bangladesh time">
+    <meta name="keywords" content="২০২৬ ফুটবল বিশ্বকাপ, বিশ্বকাপ সময়সূচী ২০২৬, World Cup 2026 Schedule, world cup live, live today, football live today, Live Score, Football Live, WC 2026 Fixtures Bangladesh Time, ২০২৬ বিশ্বকাপ লাইভ, FIFA World Cup 2026 schedule, World Cup 2026 live score, WC 2026 points table, world cup 2026 fixtures, Argentina vs Brazil live 2026, messi, neymar, cr7, World Cup 2026 Bangladesh time">
     <meta name="author" content="footballdoniya">
     <meta name="robots" content="index, follow">
 
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://footballdoniya.com/"> 
     <meta property="og:title" content="২০২৬ ফুটবল বিশ্বকাপ সময়সূচী ও লাইভ স্কোর">
     <meta property="og:description" content="সব ম্যাচের সঠিক সময়সূচী এবং লাইভ আপডেট পেতে আমাদের সাইট ভিজিট করুন।">
     <meta property="og:image" content="https://res.cloudinary.com/your-cloud/image/upload/wc_preview.jpg"> 
 
+    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://footballdoniya.com/">
     <meta property="twitter:title" content="২০২৬ ফুটবল বিশ্বকাপ সময়সূচী ও লাইভ স্কোর">
@@ -38,7 +40,8 @@
     <meta name="distribution" content="global">
     <meta name="geo.region" content="USA">
 
-    <link rel="icon" type="image/png" href="https://flagcdn.com/w40/mx.png">
+    <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="apple-touch-icon" href="images/logo.png.png">
     
     <style>
         :root {
@@ -51,11 +54,7 @@
             --text-dark: #333333;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Hind Siliguri', sans-serif;
@@ -64,11 +63,7 @@
             line-height: 1.6;
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-        }
+        .container { width: 90%; max-width: 1200px; margin: auto; }
 
         /* Navbar */
         .navbar {
@@ -79,120 +74,30 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo a { display: flex; align-items: center; text-decoration: none; color: var(--white); font-size: 24px; font-weight: 700; }
+        .logo img { height: 40px; margin-right: 10px; border-radius: 5px; }
 
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .nav-links { list-style: none; display: flex; align-items: center; }
+        .nav-links li { margin-left: 15px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 15px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
 
-        .logo a {
-            color: var(--white);
-            text-decoration: none;
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .logo i {
-            color: var(--gold);
-            margin-right: 8px;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-        }
-
-        .nav-links li {
-            margin-left: 20px;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        /* Hero Section */
+        /* Hero / Banner */
         .hero {
             background: url('images/ChatGPT Image May 29, 2026, 10_03_07 AM.png') no-repeat center center/cover;
-            height: 300px;
+            height: 280px; /* উচ্চতা কিছুটা কমানো হয়েছে */
             position: relative;
-            color: var(--white);
             display: flex;
             align-items: center;
             text-align: center;
         }
+        .hero-overlay { background: rgba(235, 238, 243, 0.1); width: 100%; height: 100%; }
 
-        .hero-overlay {
-            background: rgba(235, 238, 243, 0.233);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-content {
-            width: 100%;
-        }
-
-        .badge {
-            background: var(--gold);
-            color: var(--primary-blue);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .hero h2 {
-            font-size: 40px;
-            margin: 15px 0;
-        }
-
-        .hero-btns a {
-            padding: 10px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin: 5px;
-            display: inline-block;
-        }
-
-        .btn-primary { background: var(--gold); color: var(--primary-blue); }
-        .btn-secondary { border: 2px solid var(--white); color: var(--white); }
-
-        /* Stats Bar */
-        .stats-bar {
-            background: var(--white);
-            padding: 20px 0;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .stats-grid {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-        }
-
-        .stat-item {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--secondary-blue);
-        }
-
-        .stat-item i { color: var(--primary-blue); margin-right: 5px; }
-
-        /* Schedule Section */
-        .section-header {
-            text-align: center;
-            margin-bottom: 30px;
+        /* --- ফিক্সড গ্যাপ সেকশন (সার্চ ও স্টোরি) --- */
+        #schedule {
+            padding: 15px 0 0 0 !important; /* নিচের প্যাডিং ৫৯ থেকে ০ করা হয়েছে */
+            margin-bottom: 0 !important;
         }
 
         #searchInput {
@@ -201,468 +106,176 @@
             max-width: 400px;
             border: 1px solid #ddd;
             border-radius: 25px;
-            margin-top: 15px;
+            display: block;
+            margin: 0 auto;
             outline: none;
         }
 
-        /* Match Cards */
-        .match-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        .match-story-section {
+            padding: 0 !important;
+            margin-top: -5px !important; /* সার্চ বক্সের একদম কাছে আনা হয়েছে */
         }
 
-        .match-card {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-bottom: 5px solid var(--primary-blue);
+        .story-slider {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 15px 0; /* উপরে নিচে সমান গ্যাপ */
+            scrollbar-width: none;
+        }
+        .story-slider::-webkit-scrollbar { display: none; }
+
+        .story-card {
+            flex: 0 0 140px;
+            height: 190px;
+            background: #fff;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            cursor: pointer;
+            border: 1px solid #eee;
             transition: 0.3s;
         }
+        .story-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.12); }
+        .story-card img { width: 35px; height: auto; border-radius: 3px; }
+        .story-card .team-name { font-size: 11px; font-weight: bold; color: #333; margin-top: 3px; }
+        .story-score { font-size: 18px; font-weight: 800; color: var(--primary-blue); }
+        
+        .match-status { font-size: 9px; padding: 2px 8px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
+        .status-live { background: red; color: white; animation: pulse 1.5s infinite; }
+        .status-upcoming { background: var(--primary-blue); color: white; }
+        .status-finished { background: #eee; color: #888; }
 
-        .match-card:hover { transform: translateY(-5px); }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
-        .match-teams {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
+        /* Blog Section */
+        #blog-section { margin-top: 20px !important; }
+        .section-title { font-size: 22px; color: var(--primary-blue); margin-bottom: 15px; }
+
+        #home-blog-container { display: flex; flex-direction: column; gap: 15px; }
+        .home-blog-card {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #eee;
+        }
+        .home-blog-card img { width: 220px; height: 160px; object-fit: cover; }
+        .blog-text { padding: 15px; flex: 1; }
+        .blog-text h3 { margin: 5px 0; font-size: 18px; color: var(--primary-blue); line-height: 1.3; }
+        .blog-text p { 
+            color: #666; font-size: 14px; 
+            display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; 
+            -webkit-box-orient: vertical; overflow: hidden; 
         }
 
-        .vs {
-            background: #eee;
-            padding: 2px 8px;
-            border-radius: 50%;
-            font-size: 12px;
-            margin: 0 10px;
+        footer { background: var(--primary-blue); color: var(--white); padding: 40px 0 20px; margin-top: 50px; text-align: center; }
+        .footer-social a { color: var(--white); font-size: 20px; margin: 0 10px; }
+        .footer-links a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 14px; }
+
+        @media (max-width: 600px) {
+            .home-blog-card { flex-direction: column; }
+            .home-blog-card img { width: 100%; height: 180px; }
+            .hero { height: 200px; }
         }
-
-        .match-time, .match-venue {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .watch-btn {
-            display: inline-block;
-            background: var(--live-red);
-            color: var(--white);
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .live-pulse { animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary-blue);
-            color: var(--white);
-            padding: 40px 0 20px;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        .footer-social a {
-            color: var(--white);
-            font-size: 20px;
-            margin: 0 10px;
-        }
-
-        .match-card {
-    cursor: pointer; /* মাউস নিলে হাতের চিহ্ন আসবে */
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-}
-
-.match-card:hover {
-    transform: translateY(-8px); /* কার্ডটি সামান্য উপরে উঠবে */
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* ছায়া বাড়বে */
-    border-color: var(--gold); /* বর্ডারের রঙ গোল্ডেন হবে */
-}
-
-.live-btn-small {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 15px;
-    background: #ff0000;
-    color: #fff;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.upcoming-btn-small {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 15px;
-    background: #eee;
-    color: #333;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-/* Hero Section এর লেখার নতুন রঙ */
-.hero h2 {
-    color: #011f4b; /* গাঢ় নীল */
-    font-size: 48px;
-    font-weight: 700;
-}
-
-.hero p {
-    color: #333; /* স্পষ্ট কালো বা ধূসর */
-    font-size: 20px;
-}
-
-.badge {
-    background: #011f4b; 
-    color: #ffd700; 
-}
-
-.btn-secondary {
-    border: 2px solid #011f4b;
-    color: #011f4b;
-}
-
-.match-teams {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; 
-    margin-bottom: 15px;
-}
-
-.team-info {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    width: 120px; 
-}
-
-.team-info img {
-    width: 40px; /* পতাকার সাইজ */
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 8px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-    border: 1px solid #eee;
-}
-
-.team-info span {
-    font-size: 18px;
-    font-weight: 700;
-    color: #333;
-}
-
-.vs {
-    background: #f0f0f0;
-    padding: 5px 10px;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
-    color: #888;
-}
-
-.live-score {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff0000; 
-    background: #f0f0f0;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-}
-
-.nav-links li {
-    margin-left: 20px;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px; 
-}
-
-.nav-links a:hover {
-    color: #ffd700; 
-}
-
-.nav-links a i {
-    color: #ffd700; 
-}
-
-    #home-blog-container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin-top: 20px;
-    }
-    .home-blog-card {
-        display: flex;
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        cursor: pointer;
-        transition: 0.3s;
-        border: 1px solid #eee;
-    }
-    .home-blog-card:hover { transform: scale(1.01); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-    .home-blog-card img { width: 250px; height: 180px; object-fit: cover; }
-    .blog-text { padding: 20px; flex: 1; }
-    .blog-text h3 { margin: 0 0 10px 0; color: #011f4b; }
-    .blog-text p { color: #666; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;  -webkit-box-orient: vertical; overflow: hidden; }
-    
-    @media (max-width: 600px) {
-        .home-blog-card { flex-direction: column; }
-        .home-blog-card img { width: 100%; height: 200px; }
-    }
-
-    .logo a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #fff;
-}
-
-.logo img {
-    max-height: 45px; 
-    width: auto;
-    border-radius: 5px; 
-}
-
-.content-tag {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    display: inline-block;
-}
-.tag-blog { background: #e3f2fd; color: #011f4b; }
-.tag-video { background: #ffebee; color: #ff0000; }
-
-.play-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.2);
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 40px;
-    opacity: 0.8;
-}
-
-.home-blog-card:hover .play-overlay { opacity: 1; transform: scale(1.1); transition: 0.3s; }
-
-.read-more {
-    color: #011f4b;
-    font-weight: bold;
-    font-size: 13px;
-    margin-top: 10px;
-    display: block;
-}
-
- .story-slider {
-        display: flex;
-        overflow-x: auto; /* বাম-ডানে স্ক্রল করার জন্য */
-        gap: 15px;
-        padding: 20px 0;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none; /* Firefox এর জন্য স্ক্রলবার হাইড */
-    }
-    .story-slider::-webkit-scrollbar {
-        display: none; /* Chrome/Safari এর জন্য স্ক্রলবার হাইড */
-    }
-
-    .story-card {
-        flex: 0 0 140px; /* কার্ডের উইডথ */
-        height: 200px; /* স্টোরি সাইজ হাইট */
-        background: linear-gradient(145deg, #ffffff, #f0f0f0);
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        cursor: pointer;
-        scroll-snap-align: center;
-        transition: 0.3s;
-        border: 1px solid #eee;
-        position: relative;
-    }
-
-    .story-card:hover { transform: scale(1.05); }
-
-    .story-card.live-match {
-        border: 2px solid #ff0000;
-        background: #fffafa;
-    }
-
-    .story-card img { width: 40px; height: auto; border-radius: 4px; }
-    .story-card .team-name { font-size: 12px; font-weight: bold; color: #333; text-align: center; }
-    .story-card .match-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
-    
-    .status-live { background: red; color: white; animation: pulse 1.5s infinite; }
-    .status-finished { background: #ddd; color: #777; }
-    .status-upcoming { background: #011f4b; color: white; }
-
-    .story-score { font-size: 18px; font-weight: 800; color: #011f4b; }
-
-    @keyframes pulse {
-        0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
-    }
-    /* ১. সার্চ বক্সের নিচের জায়গা কমানোর জন্য */
-#schedule {
-    padding-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
-#searchInput {
-    margin-bottom: 5px !important; /* সার্চ বক্সের ঠিক নিচের গ্যাপ */
-}
-
-/* ২. স্টোরি সেকশনের উপর ও নিচের গ্যাপ কমানো */
-.match-story-section {
-    padding: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
-.story-slider {
-    padding: 10px 0 !important; /* কার্ডের উপরে নিচে মাত্র ১০ পিক্সেল জায়গা থাকবে */
-}
-
-/* ৩. 'বিশ্বকাপ বিশেষ খবর' বা ব্লগ সেকশনের উপরের গ্যাপ কমানো */
-#blog-section {
-    margin-top: 10px !important; /* স্টোরি স্লাইডারের ঠিক নিচেই নিউজ চলে আসবে */
-    padding-top: 0 !important;
-}
-
-.section-title {
-    margin-top: 0 !important;
-    margin-bottom: 15px !important;
-    font-size: 22px; /* টাইটেলটা একটু ছোট করলে গ্যাপ আরও কম মনে হবে */
-}
-    
     </style>
 
-<link rel="icon" type="image/png" href="images/logo.png.png">
-<link rel="apple-touch-icon" href="images/logo.png.png">
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYKND7R8XP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LYKND7R8XP');
+    </script>
 
-  gtag('config', 'G-LYKND7R8XP');
-</script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      "name": "FIFA World Cup 2026 Schedule & Live Score",
+      "description": "Get real-time updates and schedule for World Cup 2026 in Bangladesh Time.",
+      "startDate": "2026-06-11",
+      "location": { "@type": "Place", "name": "USA, Canada, Mexico" },
+      "organizer": { "@type": "Organization", "name": "Football Doniya", "url": "https://footballdoniya.com" }
+    }
+    </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SportsEvent",
-  "name": "FIFA World Cup 2026 Schedule & Live Score",
-  "description": "Get real-time updates and schedule for World Cup 2026 in Bangladesh Time.",
-  "startDate": "2026-06-11",
-  "location": {
-    "@type": "Place",
-    "name": "USA, Canada, Mexico"
-  },
-  "organizer": {
-    "@type": "Organization",
-    "name": "Football Doniya",
-    "url": "https://footballdoniya.com"
-  }
-}
-</script>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9058743648394661"crossorigin="anonymous"></script>
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9058743648394661" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <h1 class="logo">
                 <a href="index.html">
-                    <img src="images/logo.png.png" alt="Football Doniya Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+                    <img src="images/logo.png.png" alt="Logo">
                     <span>FD</span>
                 </a>
             </h1>
             <ul class="nav-links">
-               <li><a href="blog.html"></i> নিউজ</a></li>
-               <li><a href="video.html"></i> ভিডিও</a></li>
-               <li><a href="points.html"></i> পয়েন্ট</a></li>
-               <li><a href="#schedule"></i> ম্যাচ</a></li>
-               <li><a href="index.html"></i> হোম</a></li>
+               <li><a href="blog.html">নিউজ</a></li>
+               <li><a href="video.html">ভিডিও</a></li>
+               <li><a href="points.html">পয়েন্ট</a></li>
+               <li><a href="index.html">হোম</a></li>
             </ul>
         </div>
     </nav>
 
+    <!-- Banner -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+    </header>
 
-    <section id="schedule" class="container" style="padding-bottom: 50px;">
-        <div class="section-header">
-            <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
+    <!-- Search Section -->
+    <section id="schedule">
+        <div class="container">
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
     </section>
 
+    <!-- Match Story Slider -->
     <section class="match-story-section">
         <div class="container">
             <div id="story-slider" class="story-slider">
-                <!-- এখানে জাভাস্ক্রিপ্ট দিয়ে সব ম্যাচ কার্ড আসবে -->
-                <p style="text-align:center; color:#666;">ম্যাচ লোড হচ্ছে...</p>
+                <p style="text-align:center; color:#666; width:100%;">ম্যাচ লোড হচ্ছে...</p>
             </div>
         </div>
     </section>
 
-<section id="blog-section" class="container" style="margin-top: 60px;">
-    <h2 class="section-title">বিশ্বকাপ বিশেষ খবর </h2>
-    <div id="home-blog-container">
-        <!-- এখানে সব ব্লগ কার্ড আকারে আসবে -->
-    </div>
-</section>
+    <!-- Blog & Video Section -->
+    <section id="blog-section" class="container">
+        <h2 class="section-title">বিশ্বকাপ বিশেষ খবর ও ভিডিও</h2>
+        <div id="home-blog-container">
+            <!-- JavaScript will load content here -->
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <h3>WC 2026</h3>
+            <h3>Football Doniya</h3>
             <p>সবচেয়ে দ্রুত খেলার আপডেট পেতে আমাদের সাথেই থাকুন।</p>
             <div class="footer-social" style="margin: 20px 0;">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-youtube"></i></a>
             </div>
-
-            <div class="footer-links" style="margin-top: 20px;">
-                 <a href="about.html" style="color: #fff; margin: 0 10px;">আমাদের সম্পর্কে</a> | 
-                <a href="contact.html" style="color: #fff; margin: 0 10px;">যোগাযোগ</a> | 
-                <a href="privacy.html" style="color: #fff; margin: 0 10px;">প্রাইভেসি পলিসি</a>
+            <div class="footer-links">
+                <a href="about.html">আমাদের সম্পর্কে</a> | 
+                <a href="contact.html">যোগাযোগ</a> | 
+                <a href="privacy.html">প্রাইভেসি পলিসি</a>
             </div>
-            <p style="font-size: 14px; opacity: 0.7;">&copy; ২০২৬ ফুটবল বিশ্বকাপ ফ্যান সাইট</p>
+            <p style="font-size: 12px; opacity: 0.6; margin-top: 15px;">&copy; ২০২৬ ফুটবল বিশ্বকাপ ফ্যান সাইট</p>
         </div>
     </footer>
 
