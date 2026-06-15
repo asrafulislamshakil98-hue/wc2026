@@ -182,4 +182,87 @@ if (searchInput) {
     });
 }
 
+// ১. কন্টেন্ট লোড করার মেইন ফাংশন
+async function initializeHome() {
+    try {
+        const [matchRes, blogRes, videoRes] = await Promise.all([
+            fetch('/api/matches'),
+            fetch('/api/blogs'),
+            fetch('/api/videos')
+        ]);
+
+        const allMatches = await matchRes.json();
+        const blogs = await blogRes.json();
+        const videos = await videoRes.json();
+
+        // ২. ম্যাচগুলোকে আপনার লজিক অনুযায়ী সাজানো
+        renderStorySlider(allMatches);
+
+        // ৩. ব্লগ ও ভিডিও রেন্ডার করা (আপনার আগের লজিক)
+        renderMixedContent(blogs, videos);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+function renderStorySlider(matches) {
+    const slider = document.getElementById('story-slider');
+    if (!slider) return;
+    slider.innerHTML = '';
+
+    const now = new Date();
+
+    // লজিক: শেষ হওয়া ম্যাচ (বামে), লাইভ (মাঝখানে), আগামী ম্যাচ (ডানে)
+    const finished = matches.filter(m => new Date(m.matchDate) < now && !m.isLive).sort((a,b) => new Date(b.matchDate) - new Date(a.matchDate));
+    const live = matches.filter(m => m.isLive);
+    const upcoming = matches.filter(m => new Date(m.matchDate) >= now && !m.isLive).sort((a,b) => new Date(a.matchDate) - new Date(b.matchDate));
+
+    // সবগুলোকে একসাথে জোড়া লাগানো [Finished (Sorted) -> Live -> Upcoming]
+    const sortedMatches = [...finished.reverse(), ...live, ...upcoming];
+
+    sortedMatches.forEach(match => {
+        const isFinished = new Date(match.matchDate) < now && !match.isLive;
+        const card = document.createElement('div');
+        card.className = `story-card ${match.isLive ? 'live-match' : ''}`;
+        
+        // কার্ডে ক্লিক করলে লাইভ পেজে যাবে
+        card.onclick = () => location.href = `live.html?id=${match._id}`;
+
+        card.innerHTML = `
+            <span class="match-status ${match.isLive ? 'status-live' : (isFinished ? 'status-finished' : 'status-upcoming')}">
+                ${match.isLive ? 'LIVE' : (isFinished ? 'FINISHED' : 'UPCOMING')}
+            </span>
+            
+            <div class="team-info">
+                <img src="${match.teamAFlag}" alt="">
+                <div class="team-name">${match.teamA}</div>
+            </div>
+
+            <div class="story-score">
+                ${(match.isLive || isFinished) ? `${match.scoreA} - ${match.scoreB}` : 'VS'}
+            </div>
+
+            <div class="team-info">
+                <img src="${match.teamBFlag}" alt="">
+                <div class="team-name">${match.teamB}</div>
+            </div>
+            
+            <div style="font-size:9px; color:#999;">${new Date(match.matchDate).toLocaleDateString('bn-BD')}</div>
+        `;
+        slider.appendChild(card);
+    });
+
+    // ৫. অটো-স্ক্রল: লাইভ ম্যাচ বা প্রথম আসন্ন ম্যাচে স্ক্রল করে নিয়ে যাবে
+    setTimeout(() => {
+        const activeMatch = document.querySelector('.live-match') || document.querySelector('.status-upcoming')?.parentElement;
+        if (activeMatch) {
+            activeMatch.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }, 500);
+}
+
+// পেজ লোড হলে ফাংশনটি রান করুন
+document.addEventListener('DOMContentLoaded', initializeHome);
+
 document.addEventListener('DOMContentLoaded', loadInitialData);

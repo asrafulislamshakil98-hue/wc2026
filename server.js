@@ -8,7 +8,6 @@ const path = require('path');
 dotenv.config();
 const app = express();
 
-// ১. ডোমেইন রিডাইরেক্ট (সবার উপরে থাকবে)
 app.use((req, res, next) => {
     const host = req.get('host');
     if (host === 'world-cup-2026-oxof.onrender.com') {
@@ -17,20 +16,17 @@ app.use((req, res, next) => {
     next();
 });
 
-// ২. মিডলওয়্যার সেটআপ
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
-// ৩. মঙ্গোডিবি কানেকশন
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.log("Connection Error: ", err));
 
 // --- ৪. ডাটাবেস মডেলসমূহ (Schemas) ---
 
-// ম্যাচ মডেল
 const MatchSchema = new mongoose.Schema({
     teamA: String, teamB: String,
     teamAFlag: String, teamBFlag: String,
@@ -46,7 +42,6 @@ const MatchSchema = new mongoose.Schema({
 });
 const Match = mongoose.model('Match', MatchSchema);
 
-// ব্লগ মডেল
 const BlogSchema = new mongoose.Schema({
     title: String, content: String, imageUrl: String,
     likes: { type: Number, default: 0 },
@@ -55,7 +50,6 @@ const BlogSchema = new mongoose.Schema({
 });
 const Blog = mongoose.model('Blog', BlogSchema);
 
-// পয়েন্ট মডেল
 const PointSchema = new mongoose.Schema({
     teamName: String, teamFlag: String,
     mp: { type: Number, default: 0 },
@@ -66,16 +60,13 @@ const PointSchema = new mongoose.Schema({
 });
 const Point = mongoose.model('Point', PointSchema);
 
-// ভিডিও মডেল
 const VideoSchema = new mongoose.Schema({
     title: String, youtubeUrl: String, thumbnail: String,
     createdAt: { type: Date, default: Date.now }
 });
 const Video = mongoose.model('Video', VideoSchema);
 
-// --- ৫. এপিআই রুটসমূহ (API Routes) ---
 
-// ম্যাচেস এপিআই
 app.get('/api/matches', async (req, res) => {
     const matches = await Match.find().sort({ matchDate: 1 });
     res.json(matches);
@@ -107,7 +98,6 @@ app.delete('/api/delete-match/:id', async (req, res) => {
     res.json({ message: "Deleted" });
 });
 
-// ব্লগ এপিআই
 app.get('/api/blogs', async (req, res) => {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json(blogs);
@@ -141,7 +131,6 @@ app.post('/api/blogs/comment/:id', async (req, res) => {
     res.json(blog.comments);
 });
 
-// পয়েন্ট টেবিল এপিআই
 app.get('/api/points-table', async (req, res) => {
     try {
         const matches = await Match.find({ isLive: false }); // শুধু শেষ হওয়া ম্যাচ
@@ -149,33 +138,27 @@ app.get('/api/points-table', async (req, res) => {
         let teamStats = {};
 
         matches.forEach(m => {
-            // যদি ম্যাচের সময় পার হয়ে যায় তবেই পয়েন্ট হিসাব করবে
             if (new Date(m.matchDate) <= now) {
                 const teams = [m.teamA, m.teamB];
                 
-                // টিম অবজেক্ট তৈরি (যদি আগে না থাকে)
                 teams.forEach(t => {
                     if (!teamStats[t]) {
                         teamStats[t] = { mp: 0, w: 0, d: 0, l: 0, pts: 0 };
                     }
                 });
 
-                // ম্যাচ খেলেছে (MP) যোগ করা
                 teamStats[m.teamA].mp += 1;
                 teamStats[m.teamB].mp += 1;
 
                 if (m.scoreA > m.scoreB) {
-                    // টিম A জিতেছে
                     teamStats[m.teamA].w += 1;
                     teamStats[m.teamA].pts += 3;
                     teamStats[m.teamB].l += 1;
                 } else if (m.scoreB > m.scoreA) {
-                    // টিম B জিতেছে
                     teamStats[m.teamB].w += 1;
                     teamStats[m.teamB].pts += 3;
                     teamStats[m.teamA].l += 1;
                 } else {
-                    // ড্র হয়েছে (০-০ বা ১-১ যাই হোক)
                     teamStats[m.teamA].d += 1;
                     teamStats[m.teamA].pts += 1;
                     teamStats[m.teamB].d += 1;
@@ -194,7 +177,6 @@ app.put('/api/update-single-point/:id', async (req, res) => {
     res.json({ message: "Updated" });
 });
 
-// ভিডিও এপিআই
 app.get('/api/videos', async (req, res) => {
     const videos = await Video.find().sort({ createdAt: -1 });
     res.json(videos);
@@ -221,12 +203,10 @@ async function updateLiveScoresFromAPI() {
         const liveMatches = await Match.find({ isLive: true });
         for (let match of liveMatches) {
             if (match.apiMatchId) {
-                // ১. স্কোর এবং ইভেন্ট আনার জন্য রিকোয়েস্ট
                 const response = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${match.apiMatchId}`, {
                     headers: { 'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com' }
                 });
 
-                // ২. স্ট্যাটিস্টিকস (Shots, Possession) আনার জন্য আলাদা রিকোয়েস্ট
                 const statsRes = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics?fixture=${match.apiMatchId}`, {
                     headers: { 'X-RapidAPI-Key': process.env.FOOTBALL_API_KEY, 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com' }
                 });
@@ -237,7 +217,6 @@ async function updateLiveScoresFromAPI() {
                 if (apiData) {
                     let updatedStats = { possessionA: 50, possessionB: 50, shotsA: 0, shotsB: 0 };
 
-                    // স্ট্যাটাস ডাটা প্রসেস করা
                     if (statsData && statsData.length > 0) {
                         const sA = statsData[0].statistics;
                         const sB = statsData[1].statistics;
@@ -252,7 +231,7 @@ async function updateLiveScoresFromAPI() {
                     await Match.findByIdAndUpdate(match._id, {
                         scoreA: apiData.goals.home,
                         scoreB: apiData.goals.away,
-                        stats: updatedStats, // স্ট্যাটাস আপডেট
+                        stats: updatedStats, 
                         events: apiData.events.map(ev => ({
                             minute: ev.time.elapsed,
                             type: ev.type,

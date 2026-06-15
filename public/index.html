@@ -482,6 +482,57 @@
     margin-top: 10px;
     display: block;
 }
+
+ .story-slider {
+        display: flex;
+        overflow-x: auto; /* বাম-ডানে স্ক্রল করার জন্য */
+        gap: 15px;
+        padding: 20px 0;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none; /* Firefox এর জন্য স্ক্রলবার হাইড */
+    }
+    .story-slider::-webkit-scrollbar {
+        display: none; /* Chrome/Safari এর জন্য স্ক্রলবার হাইড */
+    }
+
+    .story-card {
+        flex: 0 0 140px; /* কার্ডের উইডথ */
+        height: 200px; /* স্টোরি সাইজ হাইট */
+        background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        cursor: pointer;
+        scroll-snap-align: center;
+        transition: 0.3s;
+        border: 1px solid #eee;
+        position: relative;
+    }
+
+    .story-card:hover { transform: scale(1.05); }
+
+    .story-card.live-match {
+        border: 2px solid #ff0000;
+        background: #fffafa;
+    }
+
+    .story-card img { width: 40px; height: auto; border-radius: 4px; }
+    .story-card .team-name { font-size: 12px; font-weight: bold; color: #333; text-align: center; }
+    .story-card .match-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+    
+    .status-live { background: red; color: white; animation: pulse 1.5s infinite; }
+    .status-finished { background: #ddd; color: #777; }
+    .status-upcoming { background: #011f4b; color: white; }
+
+    .story-score { font-size: 18px; font-weight: 800; color: #011f4b; }
+
+    @keyframes pulse {
+        0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
+    }
     </style>
 
 <link rel="icon" type="image/png" href="images/logo.png.png">
@@ -539,48 +590,22 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-overlay">
-            <div class="hero-content">
-               
-            </div>
-        </div>
-    </header>
-
-    <section class="stats-bar">
-        <div class="container stats-grid">
-            <div class="stat-item"><i class="fas fa-flag"></i> ৪৮টি দল</div>
-            <div class="stat-item"><i class="fas fa-map-marker-alt"></i> ১৬টি শহর</div>
-            <div class="stat-item"><i class="fas fa-trophy"></i> ১০৪টি ম্যাচ</div>
-        </div>
-    </section>
 
     <section id="schedule" class="container" style="padding-bottom: 50px;">
         <div class="section-header">
             <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
-
-        <div id="loading" style="text-align: center; padding: 20px;">
-            <i class="fas fa-spinner fa-spin"></i> ম্যাচের তথ্য লোড হচ্ছে...
-        </div>
-
-        <div id="match-container" class="match-grid">
-            <!-- জাভাস্ক্রিপ্ট এখানে ম্যাচগুলো দেখাবে -->
-        </div>
     </section>
 
-    <section id="schedule" class="container">
-    <div id="match-container" class="match-grid">
-        <!-- জাভাস্ক্রিপ্ট এখানে শুরুতে ৪টি ম্যাচ দেখাবে -->
-    </div>
-    
-    <div style="text-align: center; margin-top: 30px;">
-        <button id="moreMatchesBtn" class="btn-secondary" onclick="showAllMatches()">
-            আরও ম্যাচ দেখুন <i class="fas fa-arrow-down"></i>
-        </button>
-    </div>
-</section>
+    <section class="match-story-section">
+        <div class="container">
+            <div id="story-slider" class="story-slider">
+                <!-- এখানে জাভাস্ক্রিপ্ট দিয়ে সব ম্যাচ কার্ড আসবে -->
+                <p style="text-align:center; color:#666;">ম্যাচ লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </section>
 
 <section id="blog-section" class="container" style="margin-top: 60px;">
     <h2 class="section-title">বিশ্বকাপ বিশেষ খবর </h2>
