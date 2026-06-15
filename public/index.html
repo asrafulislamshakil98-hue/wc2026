@@ -313,15 +313,14 @@
     font-size: 14px;
 }
 
-/* Hero Section এর লেখার নতুন রঙ */
 .hero h2 {
-    color: #011f4b; /* গাঢ় নীল */
+    color: #011f4b; 
     font-size: 48px;
     font-weight: 700;
 }
 
 .hero p {
-    color: #333; /* স্পষ্ট কালো বা ধূসর */
+    color: #333; 
     font-size: 20px;
 }
 
@@ -485,19 +484,19 @@
 
  .story-slider {
         display: flex;
-        overflow-x: auto; /* বাম-ডানে স্ক্রল করার জন্য */
+        overflow-x: auto; 
         gap: 15px;
         padding: 20px 0;
         scroll-snap-type: x mandatory;
-        scrollbar-width: none; /* Firefox এর জন্য স্ক্রলবার হাইড */
+        scrollbar-width: none;
     }
     .story-slider::-webkit-scrollbar {
-        display: none; /* Chrome/Safari এর জন্য স্ক্রলবার হাইড */
+        display: none; 
     }
 
     .story-card {
-        flex: 0 0 140px; /* কার্ডের উইডথ */
-        height: 200px; /* স্টোরি সাইজ হাইট */
+        flex: 0 0 140px; 
+        height: 200px; 
         background: linear-gradient(145deg, #ffffff, #f0f0f0);
         border-radius: 15px;
         display: flex;
@@ -533,6 +532,33 @@
     @keyframes pulse {
         0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
     }
+
+.match-story-section {
+    padding: 0; 
+    margin-top: -10px; 
+}
+
+.story-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 10px 0;
+    scrollbar-width: none;
+}
+
+.section-title {
+    margin: 15px 0 10px 0; 
+    font-size: 20px;
+}
+
+#schedule {
+    padding-top: 0;
+}
+
+#searchInput {
+    margin-bottom: 5px; 
+    padding: 8px 15px;
+}
     </style>
 
 <link rel="icon" type="image/png" href="images/logo.png.png">
@@ -593,7 +619,6 @@
 
     <section id="schedule" class="container" style="padding-bottom: 50px;">
         <div class="section-header">
-            <h2>খেলার পূর্ণাঙ্গ সময়সূচী</h2>
             <input type="text" id="searchInput" placeholder="দল বা ভেন্যু দিয়ে খুঁজুন...">
         </div>
     </section>
