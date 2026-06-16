@@ -427,24 +427,48 @@ if (videoForm) {
 }
 
 function showCard(cardId, btn) {
-    // সব কার্ড হাইড করা
     document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('active-card'));
-    // সব বাটন থেকে active ক্লাস সরানো
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     
-    // নির্দিষ্ট কার্ড দেখানো
     const targetCard = document.getElementById(cardId);
     if (targetCard) {
         targetCard.classList.add('active-card');
         if (btn) btn.classList.add('active');
     }
 
-    // ট্যাব অনুযায়ী ডাটা লোড করা
     if (cardId === 'match-list-card') loadMatches();
     if (cardId === 'blog-list-card') loadBlogs();
     if (cardId === 'video-list-card') loadAdminVideos(); // ভিডিও তালিকা লোড
     if (cardId === 'points-card') loadPointsEditor();
     if (cardId === 'score-card') loadScoreEditor();
 }
+
+document.getElementById('add-blog-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const blogData = {
+        title: document.getElementById('blogTitle').value,
+        imageUrl: document.getElementById('blogImage').value,
+        content: document.getElementById('blogContent').value,
+        metaTitle: document.getElementById('metaTitle').value,
+        metaDescription: document.getElementById('metaDescription').value,
+        slug: document.getElementById('slug').value,
+        internalUrl: document.getElementById('internalUrl').value
+    };
+
+    const url = blogEditMode ? `/api/edit-blog/${blogEditId}` : '/api/add-blog';
+    const method = blogEditMode ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(blogData)
+    });
+
+    if (res.ok) {
+        alert("ব্লগ সফলভাবে পাবলিশ হয়েছে!");
+        location.reload();
+    }
+});
 
 loadMatches(); loadBlogs();

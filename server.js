@@ -44,6 +44,10 @@ const Match = mongoose.model('Match', MatchSchema);
 
 const BlogSchema = new mongoose.Schema({
     title: String, content: String, imageUrl: String,
+    metaTitle: String,
+    metaDescription: String,
+    slug: String,
+    internalUrl: String,
     likes: { type: Number, default: 0 },
     comments: [{ name: String, text: String, date: { type: Date, default: Date.now } }],
     createdAt: { type: Date, default: Date.now }

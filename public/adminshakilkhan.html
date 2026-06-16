@@ -109,6 +109,26 @@
         <form id="add-blog-form">
             <div class="form-group"><label>শিরোনাম</label><input type="text" id="blogTitle" required></div>
             <div class="form-group"><label>ছবির লিঙ্ক</label><input type="url" id="blogImage"></div>
+            <div class="form-group">
+               <label>Meta Title (এসইও এর জন্য)</label>
+               <input type="text" id="metaTitle" placeholder="গুগল সার্চে যে টাইটেল দেখাবে">
+            </div>
+
+            <div class="form-group">
+                <label>Meta Description</label>
+                <textarea id="metaDescription" rows="2" placeholder="ব্লগ সম্পর্কে ছোট বর্ণনা (১৫০ অক্ষরের মধ্যে)"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label>Slug (URL এর শেষ অংশ)</label>
+                    <input type="text" id="slug" placeholder="যেমন: argentina-vs-brazil-preview">
+                </div>
+                <div class="col">
+                    <label>Internal URL (যদি থাকে)</label>
+                    <input type="url" id="internalUrl" placeholder="অন্য কোনো পেজের লিঙ্ক">
+                </div>
+            </div>
             <div class="form-group"><label>বিস্তারিত বর্ণনা</label><textarea id="blogContent" rows="10" required></textarea></div>
             <button type="submit" class="btn-save" style="background:var(--primary)" id="blog-save-btn">ব্লগ পাবলিশ করুন</button>
         </form>

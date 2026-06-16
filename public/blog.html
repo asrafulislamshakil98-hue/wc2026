@@ -80,6 +80,7 @@
 
 <script>
     function linkifyTags(text) {
+        if (!text) return "";
         return text.replace(/#(\w+)/g, '<a href="#" class="blog-tag">#$1</a>');
     }
 
@@ -102,11 +103,13 @@
         }
     }
 
+    // ৪. কমেন্ট সেকশন টগল
     function toggleComment(id) {
         const box = document.getElementById(`comment-section-${id}`);
         box.style.display = box.style.display === "none" ? "block" : "none";
     }
 
+    // ৫. কমেন্ট পোস্ট করা
     async function postComment(id) {
         const name = document.getElementById(`comm-name-${id}`).value;
         const text = document.getElementById(`comm-text-${id}`).value;
@@ -120,6 +123,7 @@
         if(res.ok) { location.reload(); }
     }
 
+    // ৬. মেইন লোডিং ফাংশন (এসইও আপডেটসহ)
     async function loadPage() {
         const urlParams = new URLSearchParams(window.location.search);
         const blogId = urlParams.get('id');
@@ -136,9 +140,21 @@
                 return;
             }
 
+            // বর্তমান ব্লগ খুঁজে বের করা
             const currentBlog = blogId ? blogs.find(b => b._id === blogId) : blogs[0];
             
             if(currentBlog) {
+                // --- নতুন এসইও লজিক শুরু ---
+                // ব্রাউজার টাইটেল আপডেট
+                document.title = currentBlog.metaTitle || currentBlog.title;
+
+                // মেটা ডেসক্রিপশন আপডেট
+                let metaDescTag = document.querySelector('meta[name="description"]');
+                if (metaDescTag) {
+                    metaDescTag.setAttribute("content", currentBlog.metaDescription || "২০২৬ বিশ্বকাপ ফুটবল নিউজ ও আপডেট।");
+                }
+                // --- নতুন এসইও লজিক শেষ ---
+
                 let commentsHTML = currentBlog.comments.map(c => `
                     <div class="single-comment">
                         <strong>${c.name}</strong>
@@ -146,13 +162,18 @@
                     </div>
                 `).join('') || "<p style='font-size:13px; color:#888;'>কোনো মন্তব্য নেই।</p>";
 
+                // ইন্টারনাল ইউআরএল বাটন (যদি থাকে)
+                const internalBtn = currentBlog.internalUrl ? 
+                    `<div style="margin-top:20px;"><a href="${currentBlog.internalUrl}" class="action-btn" style="color:var(--primary); text-decoration:underline;">সম্পর্কিত আরও খবর পড়ুন →</a></div>` : '';
+
                 singleContainer.innerHTML = `
                     <div class="blog-card">
-                        ${currentBlog.imageUrl ? `<img src="${currentBlog.imageUrl}">` : ''}
+                        ${currentBlog.imageUrl ? `<img src="${currentBlog.imageUrl}" alt="${currentBlog.title}">` : ''}
                         <div class="blog-info">
                             <h1>${currentBlog.title}</h1>
                             <small><i class="far fa-calendar-alt"></i> ${new Date(currentBlog.createdAt).toLocaleDateString('bn-BD')}</small>
                             <p>${linkifyTags(currentBlog.content)}</p>
+                            ${internalBtn}
                         </div>
                         <div class="blog-actions">
                             <button onclick="likeBlog('${currentBlog._id}')" class="action-btn">
@@ -177,11 +198,13 @@
                 `;
             }
 
+            // অন্যান্য ব্লগের গ্রিড রেন্ডার করা
+            gridContainer.innerHTML = '';
             blogs.forEach(blog => {
                 if(blog._id !== currentBlog._id) {
                     gridContainer.innerHTML += `
                         <div class="small-blog-card" onclick="location.href='blog.html?id=${blog._id}'">
-                            <img src="${blog.imageUrl || 'https://via.placeholder.com/300x180'}">
+                            <img src="${blog.imageUrl || 'https://via.placeholder.com/300x180'}" alt="${blog.title}">
                             <div class="small-blog-info">
                                 <h3>${blog.title}</h3>
                                 <small>${new Date(blog.createdAt).toLocaleDateString('bn-BD')}</small>
@@ -191,13 +214,19 @@
                 }
             });
 
+            // "অন্যান্য খবর" টাইটেল দেখানো
+            if (blogs.length > 1) {
+                document.getElementById('other-blogs-title').style.display = 'inline-block';
+            }
+
         } catch (err) {
             console.error(err);
             document.getElementById('single-blog-view').innerHTML = "তথ্য লোড করতে ব্যর্থ!";
         }
     }
 
-    loadPage();
+    // পেজ লোড হলে ফাংশনটি চলবে
+    window.onload = loadPage;
 </script>
 </body>
 </html>
